@@ -25,7 +25,7 @@ public class TestingBinaryNums {
 		bn2 = new BinaryNumber("011001");
 		// System.out.println(bn2.getDigit(-1));
 		// System.out.println(bn2.getDigit(7));
-		System.out.println(bn2.getDigit(0));
+		System.out.println(bn2.getDigitLeft(0));
 		System.out.println(bn2.getDigit(5));
 
 		// get inner array test

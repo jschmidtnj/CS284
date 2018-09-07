@@ -129,7 +129,7 @@ public class BinaryNumber {
 	 * @param index int
 	 * @return int index value
 	 */
-	public int getDigitLeft(int index) {
+	public int getDigit(int index) {
 		try {
 			return this.data[index];
 		} catch (ArrayIndexOutOfBoundsException exception) {
@@ -142,7 +142,7 @@ public class BinaryNumber {
 	 * @param index int
 	 * @return int index value
 	 */
-	public int getDigit(int index) {
+	public int getDigitLeft(int index) {
 		try {
 			return this.data[this.length - index - 1];
 		} catch (ArrayIndexOutOfBoundsException exception) {
@@ -187,7 +187,7 @@ public class BinaryNumber {
 		int decimalValue = 0;
 		int lenBinary = this.getLength();
 		for (int i = 0; i < lenBinary; i++) {
-			decimalValue += this.getDigitLeft(i) * Math.pow(2, lenBinary - i - 1);
+			decimalValue += this.getDigit(i) * Math.pow(2, lenBinary - i - 1);
 		}
 		return decimalValue;
 	}
@@ -244,7 +244,7 @@ public class BinaryNumber {
 		}
 		int[] result = new int[numdigits];
 		for (int i = 0; i < numdigits; i++) {
-			if (bn1.getDigitLeft(i) + bn2.getDigitLeft(i) > 0) {
+			if (bn1.getDigit(i) + bn2.getDigit(i) > 0) {
 				result[i] = 1;
 			} else {
 				result[i] = 0;
@@ -275,7 +275,7 @@ public class BinaryNumber {
 		}
 		int[] result = new int[numdigits];
 		for (int i = 0; i < numdigits; i++) {
-			if (bn1.getDigitLeft(i) + bn2.getDigitLeft(i) == 2) {
+			if (bn1.getDigit(i) + bn2.getDigit(i) == 2) {
 				result[i] = 1;
 			} else {
 				result[i] = 0;
@@ -313,7 +313,7 @@ public class BinaryNumber {
 		}
 		int carry = 0;
 		for (int i = len - 1; i >= 0; i--) {
-			int sum = carry + this.getDigitLeft(i) + binarynumcopy.getDigitLeft(i);
+			int sum = carry + this.getDigit(i) + binarynumcopy.getDigit(i);
 			if (sum % 2 == 0) {
 				this.setDigit(i, 0);
 			} else {
