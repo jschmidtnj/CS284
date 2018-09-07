@@ -238,6 +238,7 @@ public class BinaryNumber {
 	 * @return
 	 */
 	public static int[] bwor(BinaryNumber bn1, BinaryNumber bn2) {
+		//or is 0 + 0 = 0, 0 + 1 = 1, 1 + 0 = 1, 1 + 1 = 1
 		int numdigits = bn1.getLength();
 		if (numdigits != bn2.getLength()) {
 			throw new IllegalArgumentException("Binary Numbers must be of the same length!");
@@ -269,6 +270,7 @@ public class BinaryNumber {
 	 * @return
 	 */
 	public static int[] bwand(BinaryNumber bn1, BinaryNumber bn2) {
+		//or is 0 + 0 = 0, 0 + 1 = 0, 1 + 0 = 0, 1 + 1 = 1
 		int numdigits = bn1.getLength();
 		if (numdigits != bn2.getLength()) {
 			throw new IllegalArgumentException("Binary Numbers must be of the same length!");
