@@ -8,6 +8,10 @@ public class Square extends Rectangle {
 		super(base, base, color);
 		this.base = base;
 	}
+	Square(int base) {
+		super(base, base, "Red");
+		this.base = base;
+	}
 	
 	public String toString() {
 		return "I am a square of base " + base + " and color " + this.getColor();
