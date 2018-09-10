@@ -91,7 +91,7 @@ public class PlayingWithShapes {
 
 		printColors(ss);
 		
-		//now for Fruit for whagtever reason
+		//now for Fruit for whatever reason
 		
 		Fruit[] fs = new Fruit[3];
 		fs[0] = new Apple("Red", 3);

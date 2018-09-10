@@ -11,7 +11,8 @@ public class Pair<E, F> {
 	private F second;
 	
 	Pair(E first, F second) {
-		super();
+		//super();
+		//you don't need that super I don't know why it's there
 		this.first = first;
 		this.second = second;
 	}
