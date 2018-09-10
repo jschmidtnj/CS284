@@ -9,7 +9,7 @@ public class GrowthRates {
 			// Big O notation is all about growth rate - how the running time grows with the
 			// growth of the array size
 			// a ratio - a proportion - a relative amount
-			if (x[1] == target) {
+			if (x[i] == target) {
 				return i;
 			}
 		}
@@ -22,7 +22,7 @@ public class GrowthRates {
 			// worst case loops x.length times (time n)
 			// and loops over in f() - y.length times at worse (time m)
 			// O(n*m) - worst case O(n^2)
-			if (f(y, x[i]) != -1) {
+			if (f(y, x[i]) == -1) {
 				return false;
 			}
 		}
@@ -32,8 +32,7 @@ public class GrowthRates {
 	public static void main(String[] args) {
 		int[] arr1 = { 1, 2, 3, 4, 5 };
 		System.out.println(f(arr1, 5));
-		int[] arr2 = { 1, 2, 3 };
-		System.out.println(g(arr1, arr2));
-		//check over this code something is wrong
+		int[] arr2 = { 1, 2, 3, 5 };
+		System.out.println(g(arr2, arr1));
 	}
 }
