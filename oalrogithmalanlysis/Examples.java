@@ -77,4 +77,18 @@ public class Examples {
 			}
 		}
 	}
+	public void method9(int n) {
+		//O(log(log(n)))
+		for (int i=0; i < n; i*=i) {
+			System.out.println("test");
+		}
+		/*
+		 * another method for O(log(log(n)))
+		 * for (int i=0; i < n; i++) {
+		 * 	for (int j=0; i < n; j*=i) {
+		 * 		System.out.println("test");
+		 * 	}
+		 * }
+		 */
+	}
 }
