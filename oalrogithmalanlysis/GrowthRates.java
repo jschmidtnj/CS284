@@ -137,10 +137,34 @@ public class GrowthRates {
 		j | 1  1  1  1  1  1  1 ... 1
 		// iterations = (n - 1) * 1 = n
 		// O(n)
+		//function denoted as T(n) = something (ex n^2+25n-5)
+		// big o notation (for this example O(n^2))
+		// T(n) belongs to O(n^2)
+		// see if 2 T(n)'s are in the same complexity class (big O) - an upper bound on both of the polynomials
 		*/
 		for (int i=1; i<n; i++) {
 			for (int j=1; j<n; j = j * 2) {
 				break;
+			}
+		}
+	}
+	
+	public static void p(int n) {
+		/*
+		 * i |       0       1       2 ... n-2 n-1
+		 * t | (n-1)*3 (n-2)*3 (n-3)*3     3*1   0
+		 * t = units of time used
+		 * 3 * 1 + 3 * 2 + ... + 3 * (n - 1)
+		 * 3 * (1 + 2 + 3 + ... + (n-1))
+		 * 3*(sum of i from i=1 to n-1)  = 3 * ((n-1)*n/2)  = 3/2 * n^2 - 3/2 * n => O(n^2)
+		 * cn^2 >= 1.5n^2 - 1.5 -> n0 = 2 and c = 1.5 - It Works
+		 * The upper bounds should be tight - your c should be close to your function (graph f(n) over n)
+		 */
+		for (int i=0; i < n; i++) {
+			for (int j = 1 + i; j < n; j++) {
+				int l = 0;
+				l++;
+				System.out.println(l);
 			}
 		}
 	}
@@ -159,5 +183,24 @@ public class GrowthRates {
 		System.out.println(k1(arr4));
 		int kcount = 2;
 		k2(kcount);
+		/*
+		 * What is Big O?
+		 * O(f(n)) = { g | 3n , c > 0 }
+		 * 0 <= g(n) <= c * f(n)
+		 * The set of functions bound above by a function * a constant
+		 * 
+		 * Example
+		 * T(n) = n^2 + 25n + 5
+		 * is T(n) in O(n^2)?
+		 * you need to find a c such that:
+		 * c*n^2 > n^2 + 25n + 5
+		 * c > 1 + 25/n + 5/n^2
+		 * lim n-> inf: c > 1
+		 * n = 5 -> c > 1 + 5 + 1/5
+		 * if c=32 and n=1, you have a solution.
+		 */
+		int pcount = 1;
+		p(pcount);
+		
 	}
 }
