@@ -4,7 +4,7 @@ import java.lang.Math;
 
 public class TestComplexity {
 	public static void main(String[] args) {
-		int pausedelay = 500; // milliseconds
+		int pausedelay = 100; // milliseconds
 		System.out.println("method 0");
 		try {
 			Thread.sleep(pausedelay);
@@ -48,7 +48,7 @@ public class TestComplexity {
 		int nummeth3 = 10;
 		Complexity.method3(nummeth3);
 		System.out.print("n*log(n) for method 3: ");
-		System.out.println(nummeth3 * Math.log(nummeth3) / Math.log(2));
+		System.out.println(nummeth3 * (Math.log(nummeth3) / Math.log(2)));
 		System.out.println("method 4");
 		try {
 			Thread.sleep(pausedelay);
@@ -67,7 +67,7 @@ public class TestComplexity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		int nummeth5 = 3;
+		int nummeth5 = 10;
 		Complexity.method5(nummeth5);
 		System.out.print("log(log(n)) for method 5: ");
 		System.out.println(Math.log(Math.log(nummeth5) / Math.log(2)) / Math.log(2));
