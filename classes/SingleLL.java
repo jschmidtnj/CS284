@@ -82,6 +82,7 @@ public class SingleLL<E> {
 			current = current.next;
 		}
 		Node<E> next = current.next;
+		size--;
 		if (next != null) {
 			previous.next = next;
 			return current.data;
