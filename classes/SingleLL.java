@@ -84,8 +84,13 @@ public class SingleLL<E> {
 		Node<E> next = current.next;
 		size--;
 		if (next != null) {
-			previous.next = next;
-			return current.data;
+			if (previous != null) {
+				previous.next = next;
+				return current.data;
+			} else {
+				head = next;
+				return next.data;
+			}
 		} else {
 			//System.out.println("no next");
 			if (previous != null) {
@@ -120,7 +125,7 @@ public class SingleLL<E> {
 		l2.add(1);
 		l2.add(2);
 		System.out.println(l2);
-		System.out.println(l2.remove(1));
+		System.out.println(l2.remove(0));
 		System.out.println(l2);
 		System.out.println(l2.remove(0));
 		System.out.println(l2);
