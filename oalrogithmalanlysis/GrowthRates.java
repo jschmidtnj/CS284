@@ -4,6 +4,7 @@ public class GrowthRates {
 	public static int f(int[] x, int target) {
 		// constant time operation - takes one theoretical unit of time (1 O)
 		for (int i = 0; i < x.length; i++) {
+			//O(n)
 			// constant unit of time 1 per loop - therefore worst case big O is O(n) ->
 			// linear
 			// Big O notation is all about growth rate - how the running time grows with the

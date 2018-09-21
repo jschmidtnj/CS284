@@ -174,12 +174,24 @@ public class SingleLL<E> {
 			for (int i=0; i < l2size; i++) {
 				if (!(this.member(current.data))) {
 					return false;
+				} else {
+					current = current.next;
 				}
 			}
 			return true;
 		} else {
 			return false;
 		}
+	}
+	
+	public Boolean hisIsSubset(SingleLL<E> l2) {
+		boolean holds = true;
+		Node <E> current = l2.head;
+		while (holds && current != null) {
+			holds = holds && member(current.data);
+			current = current.next;
+		}
+		return holds;
 	}
 
 	public static void main(String[] args) {
