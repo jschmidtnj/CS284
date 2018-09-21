@@ -53,7 +53,7 @@ public class Complexity {
 			}
 		}
 	}
-	
+
 	public static void method5(int n) {
 		// O(log(log(n)))
 		int counter = 0;
@@ -62,13 +62,13 @@ public class Complexity {
 			counter++;
 		}
 	}
-	
+
 	public static int method6(int n) {
 		// O(2^n) complexity
 		if (n <= 0) {
 			return 0;
 		} else {
-			return 1 + method6(n-1) + method6(n-1);
+			return 1 + method6(n - 1) + method6(n - 1);
 		}
 	}
 }
