@@ -6,7 +6,7 @@ import java.lang.StringBuilder;
 public class IDLList<E> {
 
 	// get rid of Static at the end!
-	private static class Node<E> {
+	private class Node<E> {
 		E data;
 		Node<E> next;
 		Node<E> prev;
