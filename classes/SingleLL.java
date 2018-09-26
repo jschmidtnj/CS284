@@ -1,7 +1,7 @@
 package classes;
 
 
-public class SingleLL<E> {
+public class SingleLL<E extends Comparable<E>> {
 
 	public class Node<F> {
 		// Data Fields for Node
@@ -275,6 +275,34 @@ public class SingleLL<E> {
 			l2current = l2current.next;
 		}
 	}
+	
+	
+	public boolean sorted() {
+		Node<E> current = this.head;
+		if (size <= 1) {
+			return true;
+		}
+		while (current.next != null) {
+			if (current.data.compareTo(current.next.data) > 0) {
+				return false;
+			}
+			current = current.next;
+		}
+		return true;
+	}
+	
+	public void stutter() {
+		Node<E> current = this.head;
+		if (size == 0) {
+			return;
+		}
+		while (current != null) {
+			Node<E> newNode = new Node<E>(current.data, current.next);
+			current.next = newNode;
+			current = newNode.next;
+			this.size++;
+		}
+	}
 
 	public static void main(String[] args) {
 		SingleLL<Integer> l = new SingleLL<Integer>();
@@ -340,5 +368,20 @@ public class SingleLL<E> {
 		l3.rad();
 		System.out.println(l3);
 		System.out.println(l3.hasDuplicates());
+		SingleLL<Integer> l4 = new SingleLL<Integer>();
+
+		for (int i = 10; i >= 0; i--) {
+			l4.add(i);
+		}
+		System.out.println(l4);
+		System.out.println(l4.sorted());
+		SingleLL<Integer> l5 = new SingleLL<Integer>();
+		for (int i = 0; i < 10; i++) {
+			l5.add(i);
+		}
+		System.out.println(l5);
+		System.out.println(l5.sorted());
+		l5.stutter();
+		System.out.println(l5);
 	}
 }

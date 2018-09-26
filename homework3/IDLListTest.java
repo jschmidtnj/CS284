@@ -1,6 +1,6 @@
 package homework3;
 
-public class Test {
+public class IDLListTest {
 	public static void main(String[] args) {
 		IDLList l1 = new IDLList();
 		l1.add(3);
