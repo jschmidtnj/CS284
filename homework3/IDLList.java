@@ -33,7 +33,7 @@ public class IDLList<E> {
 		this.head = null;
 		this.tail = null;
 		this.size = 0;
-		this.indices = new ArrayList();
+		this.indices = new ArrayList<Node<E>>();
 	}
 
 	public boolean add(E elem) {
@@ -65,8 +65,10 @@ public class IDLList<E> {
 		}
 		Node<E> indexNode = this.indices.get(index);
 		Node<E> newNode = new Node<E>(elem);
+		newNode.prev = indexNode.prev;
+		newNode.next = indexNode;
 		indexNode.prev.next = newNode;
-		indexNode.next.prev = newNode;
+		indexNode.prev = newNode;
 		this.size++;
 		this.indices.add(index, newNode);
 		return true;
@@ -82,6 +84,7 @@ public class IDLList<E> {
 		this.tail = newNode;
 		this.tail.prev = currentTail;
 		this.size++;
+		this.indices.add(newNode);
 		return true;
 	}
 
@@ -137,7 +140,7 @@ public class IDLList<E> {
 		}
 	}
 
-	public E remove(int index) {
+	public E removeAt(int index) {
 		if (this.size == 0 || index > this.size - 1) {
 			throw new IllegalArgumentException("size is 0");
 		}
@@ -149,8 +152,12 @@ public class IDLList<E> {
 		}
 		Node<E> elem = this.indices.get(index);
 		E elemdata = elem.data;
-		elem.prev.next = elem.next;
-		elem.next.prev = elem.prev;
+		if (elem.next == null) {
+			elem.prev.next = null;
+		} else {
+			elem.prev.next = elem.next;
+			elem.next.prev = elem.prev;
+		}
 		this.size--;
 		this.indices.remove(index);
 		return elemdata;
@@ -169,6 +176,14 @@ public class IDLList<E> {
 		}
 		if (current == null) {
 			return false;
+		}
+		if (indexcount == size - 1) {
+			this.removeLast();
+			return true;
+		}
+		if (indexcount == 0) {
+			this.remove();
+			return true;
 		}
 		current.prev.next = current.next;
 		current.next.prev = current.prev;

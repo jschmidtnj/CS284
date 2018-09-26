@@ -8,9 +8,9 @@ public class Test {
 		l1.add(4);
 		System.out.println(l1.size());
 		System.out.println(l1);
-		System.out.println(l1);
 		System.out.println(l1.remove());
 		System.out.println(l1.getHead());
+		System.out.println(l1.getLast());
 		System.out.println(l1);
 		System.out.println(l1.remove());
 		System.out.println(l1);
@@ -24,6 +24,15 @@ public class Test {
 		}
 		System.out.println(l1);
 		l1.remove(2);
+		System.out.println(l1);
+		l1.add(3, 5);
+		System.out.println(l1);
+		l1.append(10);
+		System.out.println(l1);
+		System.out.println(l1.get(5));
+		l1.removeAt(3);
+		System.out.println(l1);
+		System.out.println(l1.remove(5));
 		System.out.println(l1);
 	}
 }
