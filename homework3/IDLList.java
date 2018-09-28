@@ -5,7 +5,6 @@ import java.lang.StringBuilder;
 
 public class IDLList<E> {
 
-	// get rid of Static at the end!
 	private class Node<E> {
 		E data;
 		Node<E> next;
@@ -64,9 +63,7 @@ public class IDLList<E> {
 			return this.append(elem);
 		}
 		Node<E> indexNode = this.indices.get(index);
-		Node<E> newNode = new Node<E>(elem);
-		newNode.prev = indexNode.prev;
-		newNode.next = indexNode;
+		Node<E> newNode = new Node<E>(elem, indexNode.prev, indexNode);
 		indexNode.prev.next = newNode;
 		indexNode.prev = newNode;
 		this.size++;
@@ -168,7 +165,7 @@ public class IDLList<E> {
 			//throw new IllegalArgumentException("size is 0");
 			return false;
 		}
-		Node current = this.head;
+		Node<E> current = this.head;
 		int indexcount = 0;
 		while (current != null && current.data != elem) {
 			current = current.next;
@@ -193,7 +190,7 @@ public class IDLList<E> {
 	}
 
 	public String toString() {
-		Node current = this.head;
+		Node<E> current = this.head;
 		StringBuilder s = new StringBuilder();
 		s.append("[");
 		while (current != null) {
