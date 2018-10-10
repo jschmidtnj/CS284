@@ -1,6 +1,5 @@
 package classes;
 
-
 public class SingleLL<E extends Comparable<E>> {
 
 	public class Node<F> {
@@ -219,12 +218,12 @@ public class SingleLL<E extends Comparable<E>> {
 			}
 		}
 	}
-	
+
 	public void hisrad() {
 		if (head == null || head.next == null) {
 			return;
 		}
-		//list has at least 2 elements
+		// list has at least 2 elements
 		Node<E> current = this.head;
 		while (current != null && current.next != null) {
 			if (current.data.equals(current.next.data)) {
@@ -235,9 +234,9 @@ public class SingleLL<E extends Comparable<E>> {
 			}
 		}
 	}
-	
-	//private because only a certain list can see this specific method
-	//overload the previous method
+
+	// private because only a certain list can see this specific method
+	// overload the previous method
 	private Boolean member(Node<E> l, E item) {
 		Node<E> current = l;
 		Boolean mem = false;
@@ -248,12 +247,12 @@ public class SingleLL<E extends Comparable<E>> {
 		}
 		return mem; // do it this way instead of if else statements (duh)
 	}
-	
+
 	public Boolean hasDuplicates() {
 		if (head == null || head.next == null) {
 			return false;
 		}
-		//list has at least 2 elements
+		// list has at least 2 elements
 		Node<E> current = this.head;
 		while (current != null && current.next != null) {
 			if (this.member(current.next, current.data)) {
@@ -263,9 +262,9 @@ public class SingleLL<E extends Comparable<E>> {
 		}
 		return false;
 	}
-	
-	//zips 2 lists
-	//i.e. l1 = [1,2,3], l2 = [4,5,6], l3=[(1,4), (2,5), (3,6)]
+
+	// zips 2 lists
+	// i.e. l1 = [1,2,3], l2 = [4,5,6], l3=[(1,4), (2,5), (3,6)]
 	public void zip(SingleLL<E> l2) {
 		Node current = this.head;
 		Node l2current = l2.head;
@@ -275,8 +274,7 @@ public class SingleLL<E extends Comparable<E>> {
 			l2current = l2current.next;
 		}
 	}
-	
-	
+
 	public boolean sorted() {
 		Node<E> current = this.head;
 		if (size <= 1) {
@@ -290,7 +288,7 @@ public class SingleLL<E extends Comparable<E>> {
 		}
 		return true;
 	}
-	
+
 	public void stutter() {
 		Node<E> current = this.head;
 		if (size == 0) {
