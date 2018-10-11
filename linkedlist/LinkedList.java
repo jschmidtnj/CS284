@@ -25,6 +25,60 @@ public class LinkedList<E> {
 	public String concatenate() {
 		return concatenate(this.head);
 	}
+
+	public void add(E item) {
+		head = new Node<E>(item, head);
+		size++;
+	}
+
+	public E get(int index) {
+		if (index < 0 || index > size - 1) {
+			throw new ArrayIndexOutOfBoundsException("get: index not found");
+		}
+		Node<E> current = head;
+		for (int i = 0; i < index; i++) {
+			current = current.next;
+		}
+		return current.data;
+	}
+
+	public void removeFirst() {
+		if (head == null) {
+			throw new IllegalArgumentException("removefirst: cannot remove from empty list");
+		}
+		head = head.next;
+		size--;
+	}
+
+	public Boolean member(E item) {
+		Node<E> current = head;
+		// comparison from left to right - short circuit vs long circuit
+		// just & or | result in long circuit, && and || result in short circuit
+		while (current != null && current.data != item) { // if these two are switched, you get a null pointer exception
+															// (example of short circuit)
+			current = current.next;
+		}
+		return current != null; // do it this way instead of if else statements (duh)
+	}
+
+	public void add(E item, int index) {
+		if (index < 0 || index > size) {
+			throw new IllegalArgumentException("add: cannot add at this index");
+		}
+		// operation reused at beginning
+		if (index == 0) {
+			this.add(item);
+		} else {
+			Node<E> previous = head;
+			for (int i = 0; i < index - 1; i++) {
+				previous = previous.next;
+			}
+			Node<E> next = previous.next;
+			Node<E> newNode = new Node<E>(item, next);
+			previous.next = newNode;
+			size++;
+		}
+	}
 	
 	public String concatenate(Node<E> head) {
 		try {
