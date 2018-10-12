@@ -1,5 +1,8 @@
 package linkedlist;
 
+import java.lang.ArrayIndexOutOfBoundsException;
+import java.lang.IllegalArgumentException;
+
 public class LinkedList<E> {
 	private Node<E> head;
 	

@@ -40,26 +40,6 @@ public class Complexity {
 		}
 	}
 
-	public static void method1(int n) {
-		// O(n^2) complexity
-		int counter = 0;
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				System.out.println("Operation " + counter);
-				counter++;
-			}
-		}
-	}
-
-	public static void method2(int n) {
-		// O(log(n)) complexity
-		int counter = 0;
-		for (int i = 1; i < n; i *= 2) {
-			System.out.println(" Operation " + counter);
-			counter++;
-		}
-	}
-
 	public static void method3(int n) {
 		// O(n*log(n)) complexity
 		int counter = 0;
@@ -206,6 +186,12 @@ programming exercise (1 or 2) - maybe double linked.
 ### Single Linked List
 
 ```java
+
+package linkedlist;
+
+import java.lang.ArrayIndexOutOfBoundsException;
+import java.lang.IllegalArgumentException;
+
 public class LinkedList<E> {
 	private Node<E> head;
 	
@@ -246,14 +232,6 @@ public class LinkedList<E> {
 			current = current.next;
 		}
 		return current.data;
-	}
-
-	public void removeFirst() {
-		if (head == null) {
-			throw new IllegalArgumentException("removefirst: cannot remove from empty list");
-		}
-		head = head.next;
-		size--;
 	}
 
 	public Boolean member(E item) {
@@ -331,3 +309,143 @@ stacks are very similar to queues - an exercise on one of the two
   
 stacks are like a pancake - you can only access the top element and you add on the top.  
 queues are like a line at a coffee shop - you can only access the top element and you add to the back of the line.  
+
+### Stacks
+
+```java
+package stacks;
+
+public interface StackInt<E> {
+	//stack interface (data structure) only has these 4 things.
+	void push(E item); //adds to the top of the stack
+	E peek(); //looks at the top element of the stack
+	E pop(); //removes the top element of the stack
+	boolean isEmpty(); //checks if the stack is empty
+	int size(); //optional
+}
+```
+
+```java
+package stacks;
+
+import java.util.EmptyStackException;
+
+public class StackSLL<E> implements StackInt<E> {
+
+	public class Node<F> {
+		// Data Fields for Node
+		private F data;
+		private Node<F> next;
+
+		public Node(F data) {
+			super();
+			this.data = data;
+		}
+
+		public Node(F data, Node<F> next) {
+			super();
+			this.data = data;
+			this.next = next;
+		}
+
+	}
+
+	// Data fields
+	private Node<E> top;
+	private int size;
+
+	// Constructor
+	StackSLL() {
+		top = null;
+		size = 0;
+	}
+
+	public void push(E item) {
+		top = new Node<E>(item, top);
+		size++;
+	}
+
+	public E peek() {
+		if (top == null) {
+			throw new EmptyStackException();
+		}
+		return top.data;
+	}
+
+	public E pop() {
+		if (top == null) {
+			throw new EmptyStackException();
+		}
+		E temp = top.data;
+		top = top.next;
+		size--;
+		return temp;
+	}
+
+}
+```
+
+### Queues
+
+```java
+package stacks;
+import java.util.NoSuchElementException;
+public class QueueSLL<E> {
+	public class Node<F> {
+		// Data Fields for Node
+		private F data;
+		private Node<F> next;
+
+		public Node(F data) {
+			super();
+			this.data = data;
+		}
+		public Node(F data, Node<F> next) {
+			super();
+			this.data = data;
+			this.next = next;
+		}
+
+	}
+	private Node<E> front;
+	private Node<E> rear;
+	private int size;
+	QueueSLL() {
+		front = null;
+		rear = null;
+		size = 0;
+	}
+	public boolean offer(E item) {
+		rear = new Node<E>(item, rear);
+		if (front == null) { //queue is empty
+			front = rear;
+		}
+		size++;
+		return true;
+		//return false if there is a size limit and the limit has been reached
+	}
+	public E element() {
+		//returns item at the head of the queue
+		if (size == 0) {
+			throw new NoSuchElementException();
+		}
+		return front.data;
+	}
+	//public String toString() {}
+	public static void main(String[] args) {
+		QueueSLL<Integer> q1 = new QueueSLL<Integer>();
+		for (int i=0; i<5; i++) {
+			q1.offer(i);
+		}
+		System.out.println(q1);
+		q1.remove();
+		System.out.println(q1);
+		q1.remove();
+		q1.remove();
+		System.out.println(q1);
+		q1.remove();
+		q1.remove();
+		System.out.println(q1);
+	}
+}
+```
