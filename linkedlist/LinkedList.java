@@ -5,6 +5,7 @@ import java.lang.IllegalArgumentException;
 
 public class LinkedList<E> {
 	private Node<E> head;
+	private int size;
 	
 	private class Node<E>{
 		private Node<E> next;
@@ -23,6 +24,7 @@ public class LinkedList<E> {
 	
 	public LinkedList() {
 		this.head = null;
+		this.size = 0;
 	}
 
 	public String concatenate() {
@@ -108,9 +110,9 @@ public class LinkedList<E> {
 	}
 	
 	public Node<E> reverse(Node<E> head) {
-		Node current = head;
-		Node previous = null;
-		Node next;
+		Node<E> current = head;
+		Node<E> previous = null;
+		Node<E> next;
 		while (current != null) {
 			next = current.next;
 			current.next = previous;

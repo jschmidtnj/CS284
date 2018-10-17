@@ -30,5 +30,4 @@ public class Pair<E, F> {
 		this.second = second;
 	}
 	
-	
 }
