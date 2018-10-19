@@ -1,5 +1,8 @@
 package trees;
 
+import java.util.ArrayList;
+import java.lang.Math;
+
 public class BTree<E> {
 
 	public static class Node<F> {
@@ -42,6 +45,10 @@ public class BTree<E> {
 		public void setRight(Node<F> right) {
 			this.right = right;
 		}
+		
+		public Boolean isLeaf() {
+			return this.left == null && this.right == null;
+		}
 
 	}
 
@@ -78,6 +85,113 @@ public class BTree<E> {
 	public void setSize(int size) {
 		this.size = size;
 	}
+	
+	public boolean isLeaf() {
+		return root != null && root.isLeaf();
+	}
+	
+	public int no_of_leaves() {
+		return no_of_leaves(root);
+	}
+	
+	public int no_of_leaves(Node<E> current) {
+		if (current == null) {
+			return 0;
+		}
+		if (current.isLeaf()) {
+			return 1;
+		}
+		return no_of_leaves(current.left) + no_of_leaves(current.right);
+	}
+	
+	private ArrayList<E> preorder(Node<E> current) {
+		ArrayList<E> result = new ArrayList<E>();
+		if (current == null) {
+			return new ArrayList<E>();
+		}
+		result.add(current.data);
+		result.addAll(preorder(current.left));
+		result.addAll(preorder(current.right));
+		return result;
+	}
+	
+	public ArrayList<E> preorder() {
+		return preorder(root);
+	}
+	
+	private void mirror_image(Node<E> current) {
+		if (current == null) {
+			return;
+		}
+		Node<E> temp = current.left;
+		current.left = current.right;
+		current.right = temp;
+		mirror_image(current.left);
+		mirror_image(current.right);
+	}
+	
+	public void mirror_image() {
+		mirror_image(root);
+	}
+	
+	private int size(Node<E> current) {
+		if (current == null) {
+			return 0;
+		}
+		return 1 + size(current.left) + size(current.right);
+	}
+	
+	
+	public int size() {
+		return size(root);
+	}
+	
+	public boolean isFull(Node<E> current) {
+		if (current == null) {
+			return true;
+		}
+		if (current.left == null && current.right == null) {
+			return true;
+		}
+		if (current.left != null && current.right == null) {
+			return false;
+		}
+		if (current.right != null && current.left == null) {
+			return false;
+		}
+		return isFull(current.left) && isFull(current.right);
+	}
+	
+	public boolean isFull() {
+		return isFull(root);
+	}
+	
+	private int height(Node<E> current) {
+		if (current == null) {
+			return 0; //this can be -1 (depends on definition)
+		}
+		return 1 + Math.max(height(current.left), height(current.right));
+	}
+	
+	
+	public int height() {
+		return height(root);
+	}
+	
+	private boolean isComplete(Node<E> current) {
+		if (current == null) {
+			return true;
+		}
+		if (height(current.left) == height(current.right)) {
+			return true;
+		}
+		return isComplete(current.left) && isComplete(current.right);
+	}
+	
+	
+	public boolean isComplete() {
+		return isComplete(root);
+	}
 
 	public String toString(Node<E> current, int i) {
 		// print out tree in preorder
@@ -108,5 +222,15 @@ public class BTree<E> {
 		BTree<Integer> bt = new BTree<Integer>(12, leaf1, leaf2);
 
 		System.out.println(bt);
+		
+		System.out.println(bt.isLeaf());
+		System.out.println(leaf1.isLeaf());
+		System.out.println(bt.preorder());
+		System.out.println(bt.no_of_leaves());
+		bt.mirror_image();
+		System.out.println(bt.preorder());
+		System.out.println(bt.isFull());
+		System.out.println(bt.height());
+		System.out.println(bt.isComplete());
 	}
 }

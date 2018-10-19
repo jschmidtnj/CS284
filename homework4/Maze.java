@@ -1,6 +1,7 @@
 package homework4;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Class that solves maze problems with backtracking.
@@ -46,9 +47,7 @@ public class Maze implements GridColors {
 					return true;
 				} else {
 					try {
-						return findMazePath(x - 1, y - 1) || findMazePath(x, y - 1) || findMazePath(x + 1, y - 1)
-								|| findMazePath(x - 1, y) || findMazePath(x + 1, y) || findMazePath(x - 1, y + 1)
-								|| findMazePath(x, y + 1) || findMazePath(x + 1, y + 1);
+						return findMazePath(x, y - 1) || findMazePath(x - 1, y) || findMazePath(x + 1, y) || findMazePath(x, y + 1);
 					} catch (StackOverflowError t) {
 						return false;
 					}
@@ -88,14 +87,10 @@ public class Maze implements GridColors {
 					return null;
 				} else {
 					try {
-						addAllElem(array, findAllMazePathsHelper(x - 1, y - 1));
 						addAllElem(array, findAllMazePathsHelper(x, y - 1));
-						addAllElem(array, findAllMazePathsHelper(x + 1, y - 1));
 						addAllElem(array, findAllMazePathsHelper(x - 1, y));
 						addAllElem(array, findAllMazePathsHelper(x + 1, y));
-						addAllElem(array, findAllMazePathsHelper(x - 1, y + 1));
 						addAllElem(array, findAllMazePathsHelper(x, y + 1));
-						addAllElem(array, findAllMazePathsHelper(x + 1, y + 1));
 						return array;
 					} catch (StackOverflowError t) {
 						return null;
@@ -122,13 +117,70 @@ public class Maze implements GridColors {
 	 */
 
 	// ADD METHOD FOR PROBLEM 2 HERE
+	/*
 	public ArrayList<ArrayList<PairInt>> findAllMazePaths(int x, int y) {
 		// COMPLETE HERE FOR PROBLEM 1
 		return findAllMazePathsHelper(x, y);
 	}
+	*/
+	
+	public void findMazePathStackBased(int x, int y, ArrayList<ArrayList<PairInt>> result, Stack<PairInt> trace) {
+		if (x == 0 && y == 0) {
+			ArrayList<PairInt> newSolution = new ArrayList<PairInt>(trace);
+			result.add(newSolution);
+		} else {
+			if (!((y - 1) < 0 || (y - 1) > maze.getNRows() - 1)) {
+				if (maze.getColor(x, y - 1) != PATH && maze.getColor(x, y - 1) == NON_BACKGROUND) {
+					maze.recolor(x,  y - 1, PATH);
+					PairInt newPair = new PairInt(x, y - 1);
+					trace.add(newPair);
+					findMazePathStackBased(x, y - 1, result, trace);
+					maze.recolor(x,  y - 1, NON_BACKGROUND);
+				}
+			}
+			if (!((x - 1) < 0 || (x - 1) > maze.getNCols() - 1)) {
+				if (maze.getColor(x - 1, y) != PATH && maze.getColor(x - 1, y) == NON_BACKGROUND) {
+					maze.recolor(x - 1,  y, PATH);
+					PairInt newPair = new PairInt(x - 1, y);
+					trace.add(newPair);
+					findMazePathStackBased(x - 1, y, result, trace);
+					maze.recolor(x - 1,  y, NON_BACKGROUND);
+				}
+			}
+			if (!((x + 1) < 0 || (x + 1) > maze.getNCols() - 1)) {
+				if (maze.getColor(x + 1, y) != PATH && maze.getColor(x + 1, y) == NON_BACKGROUND) {
+					maze.recolor(x + 1,  y, PATH);
+					PairInt newPair = new PairInt(x + 1, y);
+					trace.add(newPair);
+					findMazePathStackBased(x + 1, y, result, trace);
+					maze.recolor(x + 1,  y, NON_BACKGROUND);
+				}
+			}
+			if (!((y + 1) < 0 || (y + 1) > maze.getNRows() - 1)) {
+				if (maze.getColor(x, y + 1) != PATH && maze.getColor(x, y + 1) == NON_BACKGROUND) {
+					maze.recolor(x,  y + 1, PATH);
+					PairInt newPair = new PairInt(x, y + 1);
+					trace.add(newPair);
+					findMazePathStackBased(x, y + 1, result, trace);
+					maze.recolor(x,  y + 1, NON_BACKGROUND);
+				}
+			}
+		}
+	}
+	
+	public ArrayList <ArrayList <PairInt >> findAllMazePaths(int x, int y) {
+		ArrayList <ArrayList <PairInt >> result = new ArrayList <>();
+		if (findMazePath(x,y)) {
+			Stack <PairInt > trace = new Stack <>();
+			findMazePathStackBased(x, y, result, trace);
+		}
+		System.out.println(result.size());
+		return result;
+	}
 
 	public String findAllMazePathsString(int x, int y) {
 		ArrayList<ArrayList<PairInt>> resultList = findAllMazePaths(x, y);
+		System.out.println(resultList.size());
 		StringBuilder resultStr = new StringBuilder();
 		resultStr.append("[");
 		int resultListSize = resultList.size();
@@ -137,15 +189,16 @@ public class Maze implements GridColors {
 			int resultListListSize = resultList.get(i).size();
 			for (int j = 0; j < resultListListSize; j++) {
 				resultStr.append(resultList.get(i).get(j).toString());
-				if (i < resultListListSize - 1) {
+				if (j < resultListListSize - 1) {
 					resultStr.append(",");
 				}
 			}
+			resultStr.append("]");
 			if (i < resultListSize - 1) {
 				resultStr.append(",");
 			}
-			resultStr.append("]");
 		}
+		resultStr.append("]");
 		return resultStr.toString();
 	}
 
