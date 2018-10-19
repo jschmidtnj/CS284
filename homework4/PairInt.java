@@ -1,38 +1,69 @@
 package homework4;
 
+//import java.lang.ClassCastException;
+
 public class PairInt {
 
-	private int first;
-	private int second;
+	private int x;
+	private int y;
 	
-	PairInt(int first, int second) {
-		this.first = first;
-		this.second = second;
+	PairInt(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 
-	public int getFirst() {
-		return first;
+	public int getX() {
+		return x;
 	}
 
-	public void setFirst(int first) {
-		this.first = first;
+	public void setX(int x) {
+		this.x = x;
 	}
 
-	public int getSecond() {
-		return second;
+	public int getY() {
+		return y;
 	}
 
-	public void setSecond(int second) {
-		this.second = second;
+	public void setY(int y) {
+		this.y = y;
+	}
+	
+	public boolean equals(Object p) {
+		PairInt theObject;
+		try {
+			theObject = (PairInt)p;
+		} catch (Exception e) {
+			//throw new ClassCastException("Error casting to PairInt");
+			return false;
+		}
+		if (theObject.x == this.x && theObject.y == this.y) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public PairInt copy() {
+		return new PairInt(this.x, this.y);
 	}
 	
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		result.append("(");
-		result.append(Integer.toString(this.first));
+		result.append(Integer.toString(this.x));
 		result.append(",");
-		result.append(Integer.toString(this.second));
+		result.append(Integer.toString(this.y));
 		result.append(")");
 		return result.toString();
+	}
+	
+	public static void main(String[] args) {
+		PairInt test1 = new PairInt(3,4);
+		int test2 = 3;
+		System.out.println(test1.equals(test2));
+		PairInt test3 = new PairInt(3,4);
+		System.out.println(test1.equals(test3));
+		PairInt test4 = new PairInt(2,4);
+		System.out.println(test1.equals(test4));
 	}
 }

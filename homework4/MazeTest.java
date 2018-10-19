@@ -100,12 +100,15 @@ public class MazeTest extends JFrame implements GridColors {
 
     public void solve() {
         Maze m = new Maze(theGrid);
-        boolean found = m.findMazePath();
-        System.out.println(m.findAllMazePaths());
+        //m.findMazePath();
+        String solution = m.findMazePathMin();
+        System.out.println(solution);
+        boolean found = solution.length() > 2;
         if (found) {
             JOptionPane.showMessageDialog(null, "Success - reset maze and try again");
         } else {
             JOptionPane.showMessageDialog(null, "No path - reset maze and try again");
         }
+        
     }
 }

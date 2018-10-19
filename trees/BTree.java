@@ -178,19 +178,19 @@ public class BTree<E> {
 		return height(root);
 	}
 	
-	private boolean isComplete(Node<E> current) {
+	private boolean isComplete(Node<E> current, int index, int size) {
+		if (index >= size) {
+			return false;
+		}
 		if (current == null) {
 			return true;
 		}
-		if (height(current.left) == height(current.right)) {
-			return true;
-		}
-		return isComplete(current.left) && isComplete(current.right);
+		return isComplete(current.left, index * 2 + 1, size) && isComplete(current.right, index * 2 + 2, size);
 	}
 	
 	
 	public boolean isComplete() {
-		return isComplete(root);
+		return isComplete(root, 0, this.size());
 	}
 
 	public String toString(Node<E> current, int i) {

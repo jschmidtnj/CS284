@@ -19,7 +19,30 @@ public class Maze implements GridColors {
 
 	/** Wrapper method. */
 	public boolean findMazePath() {
-		return findMazePath(1, 2); // (0, 0) is the start point.
+		int numrows = maze.getNRows();
+		int numcols = maze.getNCols();
+		boolean[][] selected = new boolean[numcols][numrows];
+		for (int i=0; i < selected.length; i++) {
+			for (int j=0; j < selected[i].length; j++) {
+				System.out.println(i);
+				System.out.println(j);
+				if (maze.getColor(i, j) != BACKGROUND) {
+					selected[i][j] = true;
+				} else {
+					selected[i][j] = false;
+				}
+			}
+		}
+		boolean solution = findMazePath(0, 0); // (0, 0) is the start point.
+		restore();
+		for (int i=0; i < selected.length; i++) {
+			for (int j=0; j < selected[i].length; j++) {
+				if (selected[i][j]) {
+					maze.recolor(i, j, NON_BACKGROUND);
+				}
+			}
+		}
+		return solution;
 	}
 
 	/**
@@ -36,151 +59,54 @@ public class Maze implements GridColors {
 	 */
 	public boolean findMazePath(int x, int y) {
 		// COMPLETE HERE FOR PROBLEM 1
-		if (x < 0 || y < 0 || x > maze.getNCols() - 1 || y > maze.getNRows() - 1) {
+		if (x < 0 || y < 0 || x > maze.getNCols() - 1 || y > maze.getNRows() - 1 || maze.getColor(x, y) != NON_BACKGROUND) {
 			return false;
+		}
+		if (y == maze.getNRows() - 1 && x == maze.getNCols() - 1) {
+			maze.recolor(x, y, PATH);
+			return true;
+		}
+		maze.recolor(x, y, TEMPORARY);
+		if (findMazePath(x, y - 1) || findMazePath(x - 1, y) || findMazePath(x + 1, y) || findMazePath(x, y + 1)) {
+			maze.recolor(x, y, PATH);
+			return true;
 		} else {
-			boolean open_square = maze.getColor(x, y) == NON_BACKGROUND;
-			if (!(open_square)) {
-				return false;
-			} else {
-				if (x == 0 && y == 0) {
-					return true;
-				} else {
-					try {
-						return findMazePath(x, y - 1) || findMazePath(x - 1, y) || findMazePath(x + 1, y) || findMazePath(x, y + 1);
-					} catch (StackOverflowError t) {
-						return false;
-					}
-				}
-			}
+			return false;
 		}
 	}
-
-	private static void addAllElem(ArrayList<ArrayList<PairInt>> result, ArrayList<ArrayList<PairInt>> array) {
-		if (array != null) {
-			/*
-			for (int i = 0; i < array.size(); i++) {
-				ArrayList<PairInt> data = array.get(i);
-				if (data != null) {
-					result.add(data);
-				}
-			}
-			*/
-			result.addAll(array);
-		}
-	}
-
-	public ArrayList<ArrayList<PairInt>> findAllMazePathsHelper(int x, int y) {
-		if (x < 0 || y < 0 || x > maze.getNCols() - 1 || y > maze.getNRows() - 1) {
-			return null;
-		} else {
-			boolean open_square = maze.getColor(x, y) == NON_BACKGROUND;
-			if (!(open_square)) {
-				return null;
-			} else {
-				ArrayList<ArrayList<PairInt>> array = new ArrayList<ArrayList<PairInt>>();
-				ArrayList<PairInt> newPairArrayList = new ArrayList<PairInt>();
-				PairInt newPair = new PairInt(x, y);
-				newPairArrayList.add(newPair);
-				array.add(newPairArrayList);
-				if (x == 0 && y == 0) {
-					return null;
-				} else {
-					try {
-						addAllElem(array, findAllMazePathsHelper(x, y - 1));
-						addAllElem(array, findAllMazePathsHelper(x - 1, y));
-						addAllElem(array, findAllMazePathsHelper(x + 1, y));
-						addAllElem(array, findAllMazePathsHelper(x, y + 1));
-						return array;
-					} catch (StackOverflowError t) {
-						return null;
-					}
-				}
-			}
-		}
-	}
-
-	/*
-	 * public ArrayList<PairInt> findAllMazePathsHelper(ArrayList<PairInt> result,
-	 * int x, int y) { if (!(findMazePath(x,y))) { return null; } else { PairInt
-	 * current = new PairInt(x, y); result.add(current); if (x == 0 && y == 0) {
-	 * //add the current to the arraylist return result; } else { //check all sides
-	 * try { ArrayList<PairInt> solution = findAllMazePathsHelper(result, x - 1, y -
-	 * 1); result.addAll(findAllMazePathsHelper(result, x, y - 1));
-	 * result.addAll(findAllMazePathsHelper(result, x + 1, y - 1));
-	 * result.addAll(findAllMazePathsHelper(result, x - 1, y));
-	 * result.addAll(findAllMazePathsHelper(result, x + 1, y));
-	 * result.addAll(findAllMazePathsHelper(result, x - 1, y + 1));
-	 * result.addAll(findAllMazePathsHelper(result, x, y + 1));
-	 * result.addAll(findAllMazePathsHelper(result, x + 1, y + 1)); return array; }
-	 * catch (StackOverflowError t) { return null; } } } }
-	 */
-
-	// ADD METHOD FOR PROBLEM 2 HERE
-	/*
-	public ArrayList<ArrayList<PairInt>> findAllMazePaths(int x, int y) {
-		// COMPLETE HERE FOR PROBLEM 1
-		return findAllMazePathsHelper(x, y);
-	}
-	*/
 	
 	public void findMazePathStackBased(int x, int y, ArrayList<ArrayList<PairInt>> result, Stack<PairInt> trace) {
-		if (x == 0 && y == 0) {
-			ArrayList<PairInt> newSolution = new ArrayList<PairInt>(trace);
+		PairInt newPair = new PairInt(x, y);
+		if (y == maze.getNRows() - 1 && x == maze.getNCols() - 1) {
+			ArrayList<PairInt> newSolution = new ArrayList<PairInt>();
+			trace.push(newPair);
+			newSolution.addAll(trace);
 			result.add(newSolution);
-		} else {
-			if (!((y - 1) < 0 || (y - 1) > maze.getNRows() - 1)) {
-				if (maze.getColor(x, y - 1) != PATH && maze.getColor(x, y - 1) == NON_BACKGROUND) {
-					maze.recolor(x,  y - 1, PATH);
-					PairInt newPair = new PairInt(x, y - 1);
-					trace.add(newPair);
-					findMazePathStackBased(x, y - 1, result, trace);
-					maze.recolor(x,  y - 1, NON_BACKGROUND);
-				}
-			}
-			if (!((x - 1) < 0 || (x - 1) > maze.getNCols() - 1)) {
-				if (maze.getColor(x - 1, y) != PATH && maze.getColor(x - 1, y) == NON_BACKGROUND) {
-					maze.recolor(x - 1,  y, PATH);
-					PairInt newPair = new PairInt(x - 1, y);
-					trace.add(newPair);
-					findMazePathStackBased(x - 1, y, result, trace);
-					maze.recolor(x - 1,  y, NON_BACKGROUND);
-				}
-			}
-			if (!((x + 1) < 0 || (x + 1) > maze.getNCols() - 1)) {
-				if (maze.getColor(x + 1, y) != PATH && maze.getColor(x + 1, y) == NON_BACKGROUND) {
-					maze.recolor(x + 1,  y, PATH);
-					PairInt newPair = new PairInt(x + 1, y);
-					trace.add(newPair);
-					findMazePathStackBased(x + 1, y, result, trace);
-					maze.recolor(x + 1,  y, NON_BACKGROUND);
-				}
-			}
-			if (!((y + 1) < 0 || (y + 1) > maze.getNRows() - 1)) {
-				if (maze.getColor(x, y + 1) != PATH && maze.getColor(x, y + 1) == NON_BACKGROUND) {
-					maze.recolor(x,  y + 1, PATH);
-					PairInt newPair = new PairInt(x, y + 1);
-					trace.add(newPair);
-					findMazePathStackBased(x, y + 1, result, trace);
-					maze.recolor(x,  y + 1, NON_BACKGROUND);
-				}
-			}
+			trace.pop();
+		} else if (!(x < 0 || y < 0 || x > maze.getNCols() - 1 || y > maze.getNRows() - 1 || maze.getColor(x, y) != NON_BACKGROUND)) {
+			trace.push(newPair);
+			maze.recolor(x,y,TEMPORARY);
+            findMazePathStackBased(x, y-1, result, trace);
+            findMazePathStackBased(x, y+1, result, trace);
+            findMazePathStackBased(x-1, y, result, trace);
+            findMazePathStackBased(x+1, y, result, trace);
+            maze.recolor(x, y, NON_BACKGROUND);
+            trace.pop();
 		}
-	}
+	} //
 	
 	public ArrayList <ArrayList <PairInt >> findAllMazePaths(int x, int y) {
 		ArrayList <ArrayList <PairInt >> result = new ArrayList <>();
-		if (findMazePath(x,y)) {
+		if (findMazePath()) {
 			Stack <PairInt > trace = new Stack <>();
 			findMazePathStackBased(x, y, result, trace);
+			//System.out.println(result.size());
 		}
-		System.out.println(result.size());
 		return result;
 	}
 
 	public String findAllMazePathsString(int x, int y) {
 		ArrayList<ArrayList<PairInt>> resultList = findAllMazePaths(x, y);
-		System.out.println(resultList.size());
 		StringBuilder resultStr = new StringBuilder();
 		resultStr.append("[");
 		int resultListSize = resultList.size();
@@ -203,7 +129,45 @@ public class Maze implements GridColors {
 	}
 
 	public String findAllMazePaths() {
-		return findAllMazePathsString(1, 2);
+		return findAllMazePathsString(0, 0);
+	}
+	
+	public ArrayList<PairInt> findMazePathMin(int x, int y){
+    	ArrayList<ArrayList<PairInt>> allMazePaths = findAllMazePaths(x, y);
+    	if (allMazePaths.size() != 0) {
+    		int min = allMazePaths.get(0).size();
+        	ArrayList<PairInt> shortestPath = allMazePaths.get(0);
+        	for(int i = 0; i<allMazePaths.size(); i++) {
+        		if(min > allMazePaths.get(i).size()) {
+        			shortestPath = allMazePaths.get(i);
+        		}
+        	}
+        	for (PairInt currentpair: shortestPath) {
+        		maze.recolor(currentpair.getX(), currentpair.getY(), PATH);
+        	}
+        	return shortestPath;
+    	} else {
+    		return new ArrayList<PairInt>();
+    	}
+    }
+	
+	public String findMazePathMinString(int x, int y) {
+		ArrayList<PairInt> resultList = findMazePathMin(x, y);
+		StringBuilder resultStr = new StringBuilder();
+		resultStr.append("[");
+		int resultListSize = resultList.size();
+		for (int i = 0; i < resultListSize; i++) {
+			resultStr.append(resultList.get(i).toString());
+			if (i < resultListSize - 1) {
+				resultStr.append(",");
+			}
+		}
+		resultStr.append("]");
+		return resultStr.toString();
+	}
+	
+	public String findMazePathMin() {
+		return findMazePathMinString(0, 0);
 	}
 
 	// ADD METHOD FOR PROBLEM 3 HERE
