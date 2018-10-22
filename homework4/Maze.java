@@ -24,8 +24,8 @@ public class Maze implements GridColors {
 		boolean[][] selected = new boolean[numcols][numrows];
 		for (int i=0; i < selected.length; i++) {
 			for (int j=0; j < selected[i].length; j++) {
-				System.out.println(i);
-				System.out.println(j);
+				//System.out.println(i);
+				//System.out.println(j);
 				if (maze.getColor(i, j) != BACKGROUND) {
 					selected[i][j] = true;
 				} else {

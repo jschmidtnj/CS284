@@ -6,9 +6,9 @@ import java.lang.Math;
 public class BTree<E> {
 
 	public static class Node<F> {
-		private F data;
-		private Node<F> left;
-		private Node<F> right;
+		protected F data;
+		protected Node<F> left;
+		protected Node<F> right;
 
 		public Node(F data) {
 			this.data = data;
@@ -52,8 +52,8 @@ public class BTree<E> {
 
 	}
 
-	private Node<E> root;
-	private int size;
+	protected Node<E> root;
+	protected int size;
 
 	public BTree() {
 		root = null;
