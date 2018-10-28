@@ -27,7 +27,7 @@ public class Treap<E extends Comparable<E>> {
 				return null;
 			}
 			Node<E> currentRoot = this;
-			Node<E> newRoot = this.left;
+			Node<E> newRoot = currentRoot.left;
 			currentRoot.left = newRoot.right;
 			newRoot.right = currentRoot;
 			return newRoot;
@@ -39,7 +39,7 @@ public class Treap<E extends Comparable<E>> {
 				return null;
 			}
 			Node<E> currentRoot = this;
-			Node<E> newRoot = this.right;
+			Node<E> newRoot = currentRoot.right;
 			currentRoot.right = newRoot.left;
 			newRoot.left = currentRoot;
 			return newRoot;
@@ -61,6 +61,35 @@ public class Treap<E extends Comparable<E>> {
 		priorityGenerator = new Random(seed);
 	}
 
+	public Node<E> reheap(Stack<Node<E>> nodeChain) {
+		Boolean finished = false;
+		System.out.println("starting chain");
+		Node<E> newRoot = null;
+		while (!(finished)) {
+			Node<E> childNode = nodeChain.pop();
+			if (nodeChain.isEmpty()) {
+				finished = true;
+				newRoot = childNode;
+			} else {
+				Node<E> parentNode = nodeChain.peek();
+				if (childNode.priority < parentNode.priority) {
+					finished = true;
+				} else {
+					if (parentNode.left == childNode) {
+						// child node on left so rotate right
+						System.out.println("rotate right");
+						childNode = parentNode.rotateRight();
+					} else {
+						// child node on right so rotate left
+						System.out.println("rotate left");
+						childNode = parentNode.rotateLeft();
+					}
+				}
+			}
+		}
+		return newRoot;
+	}
+
 	private boolean add(E key, Node<E> current, Stack<Node<E>> nodeChain) {
 		// if greater go left, if less than go right, add when null
 		int compcurrent = current.data.compareTo(key);
@@ -76,7 +105,7 @@ public class Treap<E extends Comparable<E>> {
 				return true;
 			} else {
 				// else go right
-				return false || add(key, current.right, nodeChain);
+				return add(key, current.right, nodeChain);
 			}
 		} else {
 			nodeChain.add(current);
@@ -87,7 +116,7 @@ public class Treap<E extends Comparable<E>> {
 				return true;
 			} else {
 				// else go left
-				return false || add(key, current.left, nodeChain);
+				return add(key, current.left, nodeChain);
 			}
 		}
 	}
@@ -99,43 +128,18 @@ public class Treap<E extends Comparable<E>> {
 		}
 		Stack<Node<E>> nodeChain = new Stack<Node<E>>();
 		Boolean result = add(key, root, nodeChain);
-		if (result) reheap(nodeChain);
+		//if (result)
+		//	this.root = reheap(nodeChain);
 		return result;
 	}
-	
-	public void reheap(Stack<Node<E>> nodeChain) {
-		Boolean finished = false;
-		System.out.println("starting chain");
-		while (!(finished)) {
-			Node<E> childNode = nodeChain.pop();
-			if (nodeChain.isEmpty()) {
-				finished = true;
-			} else {
-				Node<E> parentNode = nodeChain.peek();
-				if (childNode.priority < parentNode.priority) {
-					finished = true;
-				} else {
-					if (parentNode.left == childNode) {
-						// child node on left so rotate right
-						System.out.println("rotate right");
-						parentNode.rotateRight();
-					} else {
-						// child node on right so rotate left
-						System.out.println("rotate left");
-						parentNode.rotateLeft();
-					}
-				}
-			}
-		}
-	}
-	
+
 	public boolean add(E key, int priority) {
 		if (root == null) {
 			root = new Node<E>(key, priority);
 			return true;
 		} else {
 			// if greater go left, if less than go right, add when null
-			//max heap - root has highest priority
+			// max heap - root has highest priority
 			Node<E> current = root;
 			Stack<Node<E>> nodeChain = new Stack<Node<E>>();
 			Boolean result = null;
@@ -161,18 +165,19 @@ public class Treap<E extends Comparable<E>> {
 						Node<E> newNode = new Node<E>(key, priority);
 						current.left = newNode;
 						nodeChain.add(newNode);
-						result =  true;
+						result = true;
 					} else {
 						// else go left
 						current = current.left;
 					}
 				}
 			}
-			if (result) reheap(nodeChain);
+			//if (result)
+			//	this.root = reheap(nodeChain);
 			return result;
 		}
 	}
-	
+
 	private void delete(Node<E> parentNode, Node<E> nodeToDelete) {
 		if (parentNode.left == nodeToDelete) {
 			// delete from left
@@ -182,7 +187,7 @@ public class Treap<E extends Comparable<E>> {
 			parentNode.right = null;
 		}
 	}
-	
+
 	public boolean delete(E key) {
 		if (root == null) {
 			return false;
@@ -197,7 +202,7 @@ public class Treap<E extends Comparable<E>> {
 		while (!(nodeToDelete.left == null && nodeToDelete.right == null)) {
 			if (nodeToDelete.left != null && nodeToDelete.right != null) {
 				if (nodeToDelete.left.priority > nodeToDelete.right.priority) {
-					//rotate the left side first
+					// rotate the left side first
 					nodeToDelete.left.rotateRight();
 				} else {
 					nodeToDelete.right.rotateLeft();
@@ -212,28 +217,36 @@ public class Treap<E extends Comparable<E>> {
 		this.delete(parentNode, nodeToDelete);
 		return true;
 	}
-	
+
 	private boolean findNode(Node<E> current, E key, Stack<Node<E>> path) {
+		if (current == null) {
+			return false;
+		}
 		path.add(current);
-		if (current.data == key) {
+		int comp = current.data.compareTo(key);
+		if (comp == 0) {
 			return true;
 		}
-		if (current.data == null) {
+		if (comp < 1) {
+			return findNode(current.right, key, path);
+		}
+		return findNode(root.left, key, path);
+	}
+
+	private Boolean find(Node<E> root, E key) {
+		if (root == null) {
 			return false;
 		}
-		return findNode(current.left, key, path) || findNode(current.right, key, path);
-	}
-	
-	private boolean find(Node<E> root, E key) {
-		if (root.data == key) {
+		int comp = root.data.compareTo(key);
+		if (comp == 0) {
 			return true;
 		}
-		if (root.data == null) {
-			return false;
+		if (comp < 1) {
+			return find(root.right, key);
 		}
-		return find(root.left, key) || find(root.right, key);
+		return find(root.left, key);
 	}
-	
+
 	public boolean find(E key) {
 		if (root == null) {
 			return false;
@@ -270,7 +283,7 @@ public class Treap<E extends Comparable<E>> {
 		System.out.println(t1.add(7));
 		System.out.println(t1.add(4));
 		System.out.println(t1);
-		//System.out.println(t1.add(5));
+		// System.out.println(t1.add(5));
 		System.out.println("adding 4");
 		System.out.println(t1.add(4, 363636));
 		System.out.println(t1);
