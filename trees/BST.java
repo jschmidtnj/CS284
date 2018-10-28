@@ -36,21 +36,21 @@ public class BST<E extends Comparable<E>> extends BTree<E> {
 		return find(data, root);
 	}
 
-	public Node<E> add(E item, Node<E> current) {
+	private Node<E> add(E item, Node<E> current) {
 		if (current == null) {
 			addOk = true;
 			return new Node<E>(item);
 		}
 		int comp = current.data.compareTo(item);
-		if (comp < 0) {
+		if (comp == 0) {
+			addOk = false;
+			return current;
+		}
+		if (comp < 1) {
 			current.right = add(item, current.right);
 			return current;
-		} else if (comp > 0) {
-			current.left = add(item, current.left);
-			return current;
 		} else {
-			// item = a node data in tree
-			addOk = false;
+			current.left = add(item, current.left);
 			return current;
 		}
 	}
@@ -75,7 +75,7 @@ public class BST<E extends Comparable<E>> extends BTree<E> {
 		}
 		return minimum(root);
 	}
-	
+
 	public Node<E> maximum(Node<E> current) {
 		if (current.right == null) {
 			return current;
@@ -83,7 +83,7 @@ public class BST<E extends Comparable<E>> extends BTree<E> {
 			return maximum(current);
 		}
 	}
-	
+
 	public Node<E> maximum() {
 		if (root == null) {
 			return null;
@@ -100,7 +100,7 @@ public class BST<E extends Comparable<E>> extends BTree<E> {
 			if (current.left != null) {
 				// traverse down left side and get node to the far right of the left, then
 				// delete that and make it's value current
-				
+
 			} else {
 				current = null;
 			}
@@ -118,6 +118,13 @@ public class BST<E extends Comparable<E>> extends BTree<E> {
 
 	// Methods
 	public static void main(String[] args) {
+		BST<Integer> bst1 = new BST<Integer>();
+		bst1.add(3);
+		bst1.add(3);
+		bst1.add(7);
+		bst1.add(4);
+		bst1.add(5);
+		System.out.println(bst1);
 		BST<Integer> leaf1 = new BST<Integer>(12);
 		BST<Integer> leaf2 = new BST<Integer>(33);
 		BST<Integer> bst = new BST<Integer>(23, leaf1, new BST<Integer>(44, leaf2, new BST<Integer>()));
