@@ -61,28 +61,61 @@ public class Treap<E extends Comparable<E>> {
 		priorityGenerator = new Random(seed);
 	}
 
-	public Node<E> reheap(Stack<Node<E>> nodeChain) {
+	private Node<E> reheap(Stack<Node<E>> nodeChain) {
 		Boolean finished = false;
-		System.out.println("starting chain");
 		Node<E> newRoot = null;
+		Node<E> childNode = null;
+		Node<E> oldparentNode = null;
+		Node<E> parentNode = null;
+		Node<E> grandparentNode = null;
 		while (!(finished)) {
-			Node<E> childNode = nodeChain.pop();
+			childNode = nodeChain.pop();
+			System.out.println(childNode.priority);
 			if (nodeChain.isEmpty()) {
 				finished = true;
-				newRoot = childNode;
 			} else {
-				Node<E> parentNode = nodeChain.peek();
+				parentNode = oldparentNode = nodeChain.pop();
 				if (childNode.priority < parentNode.priority) {
-					finished = true;
+					System.out.println("priority is less");
+					if (nodeChain.isEmpty()) {
+						newRoot = parentNode;
+						finished = true;
+					} else {
+						grandparentNode = nodeChain.peek();
+						newRoot = grandparentNode;
+					}
 				} else {
 					if (parentNode.left == childNode) {
 						// child node on left so rotate right
 						System.out.println("rotate right");
-						childNode = parentNode.rotateRight();
+						parentNode = parentNode.rotateRight();
 					} else {
 						// child node on right so rotate left
 						System.out.println("rotate left");
-						childNode = parentNode.rotateLeft();
+						parentNode = parentNode.rotateLeft();
+					}
+					if (nodeChain.isEmpty()) {
+						newRoot = parentNode;
+						finished = true;
+					} else {
+						grandparentNode = nodeChain.peek();
+						if (grandparentNode.right == oldparentNode) {
+							grandparentNode.right = parentNode;
+						} else {
+							grandparentNode.left = parentNode;
+						}
+						if (grandparentNode.priority >= parentNode.priority) {
+							newRoot = grandparentNode;
+						} else {
+							System.out.println("flip grandparent and parent");
+							if (grandparentNode.right == parentNode) {
+								System.out.println("on right so rotate left");
+								newRoot = grandparentNode.rotateLeft();
+							} else {
+								System.out.println("on left so rotate right");
+								newRoot = grandparentNode.rotateRight();
+							}
+						}
 					}
 				}
 			}
@@ -90,7 +123,7 @@ public class Treap<E extends Comparable<E>> {
 		return newRoot;
 	}
 
-	private boolean add(E key, Node<E> current, Stack<Node<E>> nodeChain) {
+	private boolean add(E key, Node<E> current, Stack<Node<E>> nodeChain, int maxPriority) {
 		// if greater go left, if less than go right, add when null
 		int compcurrent = current.data.compareTo(key);
 		if (compcurrent == 0) {
@@ -99,37 +132,39 @@ public class Treap<E extends Comparable<E>> {
 			nodeChain.add(current);
 			if (current.right == null) {
 				// add node to the right
-				Node<E> newNode = new Node<E>(key, priorityGenerator.nextInt());
+				Node<E> newNode = new Node<E>(key, priorityGenerator.nextInt(maxPriority));
 				current.right = newNode;
 				nodeChain.add(newNode);
 				return true;
 			} else {
 				// else go right
-				return add(key, current.right, nodeChain);
+				return add(key, current.right, nodeChain, maxPriority);
 			}
 		} else {
 			nodeChain.add(current);
 			if (current.left == null) {
-				Node<E> newNode = new Node<E>(key, priorityGenerator.nextInt());
+				Node<E> newNode = new Node<E>(key, priorityGenerator.nextInt(maxPriority));
 				current.left = newNode;
 				nodeChain.add(newNode);
 				return true;
 			} else {
 				// else go left
-				return add(key, current.left, nodeChain);
+				return add(key, current.left, nodeChain, maxPriority);
 			}
 		}
 	}
 
 	public boolean add(E key) {
+		int maxPriority = 100;
 		if (root == null) {
-			root = new Node<E>(key, priorityGenerator.nextInt());
+			root = new Node<E>(key, priorityGenerator.nextInt(maxPriority));
 			return true;
 		}
 		Stack<Node<E>> nodeChain = new Stack<Node<E>>();
-		Boolean result = add(key, root, nodeChain);
-		//if (result)
-		//	this.root = reheap(nodeChain);
+		Boolean result = add(key, root, nodeChain, maxPriority);
+		if (result) {
+			this.root = reheap(nodeChain);
+		}
 		return result;
 	}
 
@@ -142,11 +177,14 @@ public class Treap<E extends Comparable<E>> {
 			// max heap - root has highest priority
 			Node<E> current = root;
 			Stack<Node<E>> nodeChain = new Stack<Node<E>>();
-			Boolean result = null;
-			while (result == null) {
+			Boolean result = false;
+			Boolean foundresult = false;
+			while (foundresult == false) {
+				//System.out.println(current.data);
 				int compcurrent = current.data.compareTo(key);
 				if (compcurrent == 0) {
 					result = false;
+					foundresult = true;
 				} else if (compcurrent < 1) {
 					nodeChain.add(current);
 					if (current.right == null) {
@@ -155,6 +193,7 @@ public class Treap<E extends Comparable<E>> {
 						current.right = newNode;
 						nodeChain.add(newNode);
 						result = true;
+						foundresult = true;
 					} else {
 						// else go right
 						current = current.right;
@@ -166,14 +205,16 @@ public class Treap<E extends Comparable<E>> {
 						current.left = newNode;
 						nodeChain.add(newNode);
 						result = true;
+						foundresult = true;
 					} else {
 						// else go left
 						current = current.left;
 					}
 				}
 			}
-			//if (result)
-			//	this.root = reheap(nodeChain);
+			if (result) {
+				this.root = reheap(nodeChain);
+			}
 			return result;
 		}
 	}
@@ -197,8 +238,26 @@ public class Treap<E extends Comparable<E>> {
 		if (foundNode == false) {
 			return false;
 		}
-		Node<E> nodeToDelete = path.peek();
-		Node<E> parentNode = path.peek();
+		@SuppressWarnings("unchecked")
+		Stack<Node<E>> copypath = (Stack<Node<E>>)path.clone();
+		Node<E> nodeToDelete = path.pop();
+		Node<E> parentNode = null;
+		Boolean hasParent = true;
+		Node<E> newRoot = null;
+		if (path.isEmpty()) {
+			//System.out.println("no parent");
+			hasParent = false;
+		} else {
+			parentNode = path.pop();
+		}
+		Boolean hasgrandparent = true;
+		Node<E> grandparentNode = null;
+		if (path.isEmpty()) {
+			//System.out.println("no grandparent");
+			hasgrandparent = false;
+		} else {
+			grandparentNode = path.pop();
+		}
 		while (!(nodeToDelete.left == null && nodeToDelete.right == null)) {
 			if (nodeToDelete.left != null && nodeToDelete.right != null) {
 				if (nodeToDelete.left.priority > nodeToDelete.right.priority) {
@@ -207,14 +266,56 @@ public class Treap<E extends Comparable<E>> {
 				} else {
 					nodeToDelete.right.rotateLeft();
 				}
-			} else if (nodeToDelete.left != null) {
-				nodeToDelete.left.rotateRight();
-			} else if (nodeToDelete.right != null) {
-				nodeToDelete.right.rotateLeft();
+			} else {
+				//System.out.println("update parent & rotate");
+				if (nodeToDelete.left != null) {
+					//System.out.println("rotate right");
+					copypath.add(nodeToDelete.left);
+					parentNode = nodeToDelete.rotateRight();
+					//System.out.println(parentNode.data);
+					nodeToDelete = parentNode.right;
+					//System.out.println(nodeToDelete.data);
+				} else if (nodeToDelete.right != null) {
+					//System.out.println("rotate left");
+					copypath.add(nodeToDelete.right);
+					parentNode = nodeToDelete.rotateLeft();
+					nodeToDelete = parentNode.left;
+				}
+				if (!(hasParent)) {
+					if (newRoot == null) {
+						newRoot = parentNode;
+						if (newRoot.right == nodeToDelete) {
+							newRoot.right = null;
+						} else {
+							newRoot.left = null;
+						}
+					}
+					parentNode = null;
+				}
+				else if (!(hasgrandparent) && nodeToDelete.left == null && nodeToDelete.right == null) {
+					// this only occurs if key is in the middle of a three - level tree
+					grandparentNode = root;
+					hasgrandparent = true;
+				}
+				if (hasgrandparent) {
+					//System.out.println("update grandparent");
+					if (grandparentNode.right == nodeToDelete) {
+						grandparentNode.right = parentNode;
+					} else {
+						grandparentNode.left = parentNode;
+					}
+				}
 			}
 		}
 		// remove Node
-		this.delete(parentNode, nodeToDelete);
+		//System.out.println(parentNode.data);
+		//System.out.println(nodeToDelete.data);
+		if (!(hasParent)) {
+			this.root = newRoot;
+		} else {
+			this.delete(parentNode, nodeToDelete);
+		}
+		this.reheap(copypath);
 		return true;
 	}
 
@@ -230,7 +331,7 @@ public class Treap<E extends Comparable<E>> {
 		if (comp < 1) {
 			return findNode(current.right, key, path);
 		}
-		return findNode(root.left, key, path);
+		return findNode(current.left, key, path);
 	}
 
 	private Boolean find(Node<E> root, E key) {
@@ -276,19 +377,52 @@ public class Treap<E extends Comparable<E>> {
 	}
 
 	public static void main(String[] args) {
+		/*
 		Treap<Integer> t1 = new Treap<Integer>();
-		t1.add(3);
+		//System.out.println(t1);
+		System.out.println(t1.add(3, 2));
+		//System.out.println(t1);
+		System.out.println(t1.add(7, 6));
+		//System.out.println(t1.root.data);
+		//System.out.println(t1);
+		System.out.println(t1.add(4, 7));
+		System.out.println(t1.add(5, 7));
+		//System.out.println(t1);
+		//System.out.println(t1.find(1));
+		//System.out.println(t1.delete(1));
 		System.out.println(t1);
-		System.out.println(t1.add(3));
-		System.out.println(t1.add(7));
-		System.out.println(t1.add(4));
+		System.out.println(t1.delete(5));
+		System.out.println(t1);
+		t1.delete(5);
+		System.out.println(t1);
+		t1.delete(7);
+		System.out.println(t1);
+		t1.delete(4);
+		System.out.println(t1);
+		t1.delete(3);
 		System.out.println(t1);
 		// System.out.println(t1.add(5));
 		System.out.println("adding 4");
-		System.out.println(t1.add(4, 363636));
+		System.out.println(t1.add(4));
 		System.out.println(t1);
-		System.out.println(t1.add(5, 999999999));
+		System.out.println(t1.add(5));
+		System.out.println(t1.add(7));
+		System.out.println(t1.add(15));
+		System.out.println(t1.add(12));
 		System.out.println(t1);
+		System.out.println(t1.find(5));
+		System.out.println(t1.find(1));
+		*/
+		Treap<Integer> testTree = new Treap<Integer>();
+		testTree.add(4, 19);
+		testTree.add(2, 31);
+		testTree.add(6, 70);
+		testTree.add(1, 84);
+		testTree.add(3, 12);
+		testTree.add(5, 83);
+		System.out.println(testTree);
+		//testTree.add(7, 26);
+		//System.out.println(testTree);
 	}
 
 }

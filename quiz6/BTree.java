@@ -173,8 +173,47 @@ public class BTree<E> {
 
 	public ArrayList<BTree<E>> st() {
 		ArrayList<BTree<E>> result = new ArrayList<BTree<E>>();
+		if (root == null) {
+			return null;
+		}
 		st(root, result);
 		return result;
+	}
+	
+	private BTree<E> cloneAt(Node<E> current) {
+		if (current == null) {
+			return new BTree<E>();
+		}
+		if (current.isLeaf()) {
+			return new BTree<E>(current.data);
+		}
+		return new BTree<E>(current.data, cloneAt(current.left), cloneAt(current.right));
+	}
+	
+	private ArrayList<BTree<E>> projectLevel(int i, Node<E> current) {
+		ArrayList<BTree<E>> r = new ArrayList<BTree<E>>();
+		if (i == 0 && current != null) {
+			// found designated level
+			r.add(cloneAt(current));
+		} else {
+			if (current != null) {
+				r.addAll(projectLevel(i-1, current.left));
+				r.addAll(projectLevel(i-1, current.right));
+			}
+		}
+		return r;
+	}
+	
+	private ArrayList<BTree<E>> projectLevel(int i) {
+		return projectLevel(i, root);
+	}
+	
+	public ArrayList<BTree<E>> hisst() {
+		ArrayList<BTree<E>> r = new ArrayList<BTree<E>>();
+		for (int i=0; i < size; i++) {
+			r.addAll(projectLevel(i));
+		}
+		return r;
 	}
 
 	public static void main(String[] args) {
@@ -186,5 +225,7 @@ public class BTree<E> {
 		BTree<Integer> bt2 = new BTree<Integer>(20, leaf3, leaf4);
 		BTree<Integer> bt3 = new BTree<Integer>(50, bt, bt2);
 		System.out.println(bt3.st());
+		System.out.println(bt3.hisst());
+		// they are the same :)
 	}
 }
