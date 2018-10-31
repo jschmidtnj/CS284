@@ -4,6 +4,8 @@ public class BST<E extends Comparable<E>> extends BTree<E> {
 
 	// data fields inherited from BTree
 	private boolean addOk;
+	
+	private E deletedItem;
 
 	// Constructor
 	BST() {
@@ -90,7 +92,23 @@ public class BST<E extends Comparable<E>> extends BTree<E> {
 		}
 		return maximum(root);
 	}
+	
+	private E find_and_remove_max(Node<E> current) {
+		E result;
+		if (current.right.right == null) { // found the max elem
+			result = current.right.data;
+			current.right = current.right.left;
+			return result;
+		} else {
+			return find_and_remove_max(current.right);
+		}
+	}
 
+	/**
+	 * This doesn't work for some reason...
+	 * @param key
+	 * @param current
+	 */
 	private void remove(E key, Node<E> current) {
 		if (current == null) {
 			throw new IllegalArgumentException("key not found in bst");
@@ -100,7 +118,12 @@ public class BST<E extends Comparable<E>> extends BTree<E> {
 			if (current.left != null) {
 				// traverse down left side and get node to the far right of the left, then
 				// delete that and make it's value current
-
+				//current has 2 children
+				if (current.left.right == null) {
+					current.data = current.left.data;
+					current.left = current.left.left;
+				}
+				current.data = find_and_remove_max(current.left);
 			} else {
 				current = null;
 			}
@@ -114,6 +137,51 @@ public class BST<E extends Comparable<E>> extends BTree<E> {
 
 	public void remove(E key) {
 		remove(key, root);
+	}
+	
+	private Node<E> hisremove(E key, Node<E> current) {
+		if (current == null) { // item not found
+			return null;
+		}
+		int comp = key.compareTo(current.data);
+		if (comp < 0) {
+			//key is in left subtree
+			current.left = hisremove(key, current.left);
+			return current;
+		}
+		if (comp > 0) {
+			current.right = hisremove(key, current.right);
+			return current;
+		}
+		if (comp == 0) {
+			deletedItem = current.data;
+			// now what
+			if (current.isLeaf()) {
+				return null;
+			} 
+			if (current.right == null) {
+				return current.left;
+			}
+			if (current.left == null) {
+				return current.right;
+			}
+			
+			//current has 2 children
+			if (current.left.right == null) {
+				current.data = current.left.data;
+				current.left = current.left.left;
+				return current;
+			}
+			current.data = find_and_remove_max(current.left);
+			return current;
+		}
+		return null;
+		
+	}
+	
+	public E hisremove(E key) {
+		root = hisremove(key, root);
+		return deletedItem;
 	}
 
 	// Methods
@@ -133,5 +201,10 @@ public class BST<E extends Comparable<E>> extends BTree<E> {
 
 		System.out.println(bst.find(3));
 		System.out.println(bst.find(33));
+		// bst.remove(44);
+		// doesn't work for some reason
+		bst.add(37);
+		System.out.println(bst.hisremove(37));
+		System.out.println(bst);
 	}
 }

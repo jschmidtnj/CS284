@@ -315,7 +315,7 @@ public class Treap<E extends Comparable<E>> {
 		} else {
 			this.delete(parentNode, nodeToDelete);
 		}
-		this.reheap(copypath);
+		this.root = reheap(copypath);
 		return true;
 	}
 
