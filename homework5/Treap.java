@@ -3,7 +3,7 @@ package homework5;
 import java.util.Random;
 
 /**
- * OldTreap2 Class
+ * Treap Class
  * 
  * @author Joshua Schmidt I pledge my honor that I have abided by the Stevens
  *         Honor System
@@ -103,6 +103,9 @@ public class Treap<E extends Comparable<E>> {
 	 * @return true if added else false
 	 */
 	public boolean add(E key) {
+		if (key == null) {
+			throw new IllegalArgumentException("key cannot be null");
+		}
 		int numInts = 100;
 		boolean result = !(find(key));
 		if (result)
@@ -118,6 +121,9 @@ public class Treap<E extends Comparable<E>> {
 	 * @return true if it can be added and false otherwise
 	 */
 	public boolean add(E key, int priority) {
+		if (key == null) {
+			throw new IllegalArgumentException("key cannot be null");
+		}
 		boolean result = !(find(key));
 		if (result)
 			root = add(key, priority, root);
@@ -136,14 +142,17 @@ public class Treap<E extends Comparable<E>> {
 			Node<E> newNode = new Node<E>(data, priority);
 			return newNode;
 		}
+		// adding to bst using comp
 		int comp = data.compareTo(current.data);
 		if (comp < 0) {
 			current.left = add(data, priority, current.left);
+			// check if priority is less and if it is rotate
 			if (current.priority < current.left.priority) {
 				return current.rotateRight();
 			}
 		} else if (comp > 0) {
 			current.right = add(data, priority, current.right);
+			// rotate left if priority is less
 			if (current.priority < current.right.priority) {
 				return current.rotateLeft();
 			}
@@ -158,17 +167,21 @@ public class Treap<E extends Comparable<E>> {
 	 * @return true if found, else false
 	 */
 	public boolean find(E key) {
+		if (key == null) {
+			throw new IllegalArgumentException("key cannot be null");
+		}
 		return find(root, key);
 	}
 
 	/**
 	 * finds if Node is in a tree
 	 * 
-	 * @param root - current Node root of OldTreap2
+	 * @param root - current Node root of Treap
 	 * @param key     - key for Node to be found
 	 * @return true if found, else false
 	 */
 	private boolean find(Node<E> root, E key) {
+		// implementation is obvious
 		while (root != null) {
 			int comp = key.compareTo(root.data);
 			if (comp > 0) {
@@ -193,21 +206,26 @@ public class Treap<E extends Comparable<E>> {
 	private Node<E> delete(E key, Node<E> current) {
 		if (current != null) {
 			int comp = key.compareTo(current.data);
+			// bst so first search for key
 			if (comp > 0) {
 				current.right = delete(key, current.right);
 			} else if (comp < 0) {
 				current.left = delete(key, current.left);
 			} else {
+				// when you get the key, flip left if left is null
 				if (current.left == null) {
 					return current.right;
 				} else if (current.right == null) {
+					// else flip right if right is null
 					return current.left;
 				} else {
+					// else both are not null
 					// get leftmost node of right subtree
 					Node<E> leftmostNode = current.right;
 					while (leftmostNode.left != null) {
 						leftmostNode = leftmostNode.left;
 					}
+					// then recurse down the right-hand side, saving to right
 					current.data = leftmostNode.data;
 					current.right = delete(current.data, current.right);
 				}
@@ -223,6 +241,9 @@ public class Treap<E extends Comparable<E>> {
 	 * @return true if it can be deleted and false if not
 	 */
 	public boolean delete(E key) {
+		if (key == null) {
+			throw new IllegalArgumentException("key cannot be null");
+		}
 		boolean result = find(key);
 		if (result)
 			root = delete(key, root);
@@ -233,8 +254,8 @@ public class Treap<E extends Comparable<E>> {
 	 * creates a String for the Treap
 	 * 
 	 * @param current - the current root Node
-	 * @param level   - current level of the OldTreap2
-	 * @return String OldTreap2
+	 * @param level   - current level of the Treap
+	 * @return String Treap
 	 */
 	private String toString(Node<E> current, int level) {
 		StringBuilder result = new StringBuilder();
@@ -261,7 +282,7 @@ public class Treap<E extends Comparable<E>> {
 	 */
 	@Override
 	public String toString() {
-		return toString(root, 0);
+		return toString(root, 0) + "\n";
 	}
 
 	public static void main(String[] args) {
