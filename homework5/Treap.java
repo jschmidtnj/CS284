@@ -102,11 +102,11 @@ public class Treap<E extends Comparable<E>> {
 	 * @param key - data in Node
 	 * @return true if added else false
 	 */
-	public boolean add(E data) {
+	public boolean add(E key) {
 		int numInts = 100;
-		boolean result = !(find(data));
+		boolean result = !(find(key));
 		if (result)
-			root = add(data, priorityGenerator.nextInt(numInts), root);
+			root = add(key, priorityGenerator.nextInt(numInts), root);
 		return result;
 	}
 
@@ -117,10 +117,10 @@ public class Treap<E extends Comparable<E>> {
 	 * @param priority, the priority of the node
 	 * @return true if it can be added and false otherwise
 	 */
-	public boolean add(E data, int priority) {
-		boolean result = !(find(data));
+	public boolean add(E key, int priority) {
+		boolean result = !(find(key));
 		if (result)
-			root = add(data, priority, root);
+			root = add(key, priority, root);
 		return result;
 	}
 
@@ -157,15 +157,26 @@ public class Treap<E extends Comparable<E>> {
 	 * @param key - data of Node that needs to be found
 	 * @return true if found, else false
 	 */
-	public boolean find(E data) {
-		Node<E> current = root;
-		while (current != null) {
-			int comp = data.compareTo(current.data);
+	public boolean find(E key) {
+		return find(root, key);
+	}
+
+	/**
+	 * finds if Node is in a tree
+	 * 
+	 * @param root - current Node root of OldTreap2
+	 * @param key     - key for Node to be found
+	 * @return true if found, else false
+	 */
+	private boolean find(Node<E> root, E key) {
+		while (root != null) {
+			int comp = key.compareTo(root.data);
 			if (comp > 0) {
-				current = current.right;
+				root = root.right;
 			} else if (comp < 0) {
-				current = current.left;
+				root = root.left;
 			} else {
+				// the key is found
 				return true;
 			}
 		}
