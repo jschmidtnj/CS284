@@ -12,13 +12,13 @@ class TreapTest {
 		testTree.add(4, 19);
 		assertEquals(testTree.toString(), "(key=4, priority=19)\n" + 
 				"  null\n" + 
-				"  null");
+				"  null\n");
 		testTree.add(2, 31);
 		assertEquals(testTree.toString(), "(key=2, priority=31)\n" + 
 				"  null\n" + 
 				"  (key=4, priority=19)\n" + 
 				"    null\n" + 
-				"    null");
+				"    null\n");
 		testTree.add(6, 70);
 		assertEquals(testTree.toString(), "(key=6, priority=70)\n" + 
 				"  (key=2, priority=31)\n" + 
@@ -26,7 +26,7 @@ class TreapTest {
 				"    (key=4, priority=19)\n" + 
 				"      null\n" + 
 				"      null\n" + 
-				"  null");
+				"  null\n");
 		testTree.add(1, 84);
 		assertEquals(testTree.toString(), "(key=1, priority=84)\n" + 
 				"  null\n" + 
@@ -36,7 +36,7 @@ class TreapTest {
 				"      (key=4, priority=19)\n" + 
 				"        null\n" + 
 				"        null\n" + 
-				"    null");
+				"    null\n");
 		assertEquals(testTree.add(3, 12), true);
 		assertEquals(testTree.add(3, 15), false);
 		assertEquals(testTree.toString(), "(key=1, priority=84)\n" + 
@@ -49,7 +49,7 @@ class TreapTest {
 				"          null\n" + 
 				"          null\n" + 
 				"        null\n" + 
-				"    null");
+				"    null\n");
 		assertEquals(testTree.find(0), false);
 		assertEquals(testTree.find(2), true);
 		assertEquals(testTree.delete(1), true);
@@ -62,7 +62,7 @@ class TreapTest {
 				"        null\n" + 
 				"        null\n" + 
 				"      null\n" + 
-				"  null");
+				"  null\n");
 		testTree.delete(2);
 		assertEquals(testTree.toString(), "(key=6, priority=70)\n" + 
 				"  (key=4, priority=19)\n" + 
@@ -70,7 +70,7 @@ class TreapTest {
 				"      null\n" + 
 				"      null\n" + 
 				"    null\n" + 
-				"  null");
+				"  null\n");
 	}
 
 }
