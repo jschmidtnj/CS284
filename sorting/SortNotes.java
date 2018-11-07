@@ -48,4 +48,19 @@ public class SortNotes {
 	 * and if there were no swaps then you are done
 	 * O(n^2)
 	 */
+	
+	/*
+	 * Insertion sort
+	 * create a new list and insert each element in the corresponding position
+	 * 30 25 15 20 28
+	 * []
+	 * [30]; nextval = 25;
+	 * [30, 30] -> [25, 30]; | 15 20 28 // shift over, then replace at index
+	 * [15, 30, 30]; -> [15, 25, 30]; etc.
+	 * 
+	 * n -1  passes
+	 * 
+	 * worst case 54321 - has 1 2 3 and 4 shifts - corresponds to the pass $ -> n(n-1)/2 total
+	 * O(n^2)
+	 */
 }
