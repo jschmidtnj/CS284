@@ -44,9 +44,8 @@ public class Sorting {
 		}
 	}
 	
-	private static int[] merge(int[] a, int[] b) {
+	private static int[] merge(int[] a, int[] b, int[] c) {
 		// O(n) or O(n + m)
-		int[] c = new int[a.length + b.length];
 		int indexa = 0;
 		int indexb = 0;
 		int indexc = 0;
@@ -79,10 +78,31 @@ public class Sorting {
 		
 		int size = a.length / 2;
 		int[] left = Arrays.copyOfRange(a, 0, size);
-		int[] right = Arrays.copyOfRange(a, size + 1, a.length);
+		int[] right = Arrays.copyOfRange(a, size, a.length);
 		mergesort(left);
 		mergesort(right);
-		a = merge(left, right);
+		a = merge(left, right, a);
+	}
+	
+	public static void countingsort(int[] a) {
+		// [5,3,7,1,4,5]
+		// 2, 1, 1, 1, 1
+		// counts every element and then spits them out
+		int max = a[0];
+		for (int i = 0; i < a.length; i++)
+			if (a[i] > max)
+				max = a[i];
+
+		//	System.out.println(max);
+		
+		int[] counts = new int[max + 1];
+		for (int i = 0; i < a.length; i++)
+			counts[a[i]]++;
+		
+		for (int i = 0, resultindex = 0; i < counts.length && resultindex < a.length; i++)
+			if (counts[i] != 0)
+				for (int j = 0; j < counts[i] && j < a.length; j++, resultindex++)
+					a[resultindex] = i;
 	}
 
 	public static void main(String[] args) {
@@ -99,6 +119,8 @@ public class Sorting {
 		int[] d = { 35, 65, 30, 60, 20 };
 		mergesort(d);
 		System.out.println(Arrays.toString(d));
-		
+		int[] e = { 35, 65, 30, 60, 20, 20	};
+		countingsort(e);
+		System.out.println(Arrays.toString(e));
 	}
 }
