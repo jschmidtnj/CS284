@@ -43,6 +43,47 @@ public class Sorting {
 			a[current] = nextVal;
 		}
 	}
+	
+	private static int[] merge(int[] a, int[] b) {
+		// O(n) or O(n + m)
+		int[] c = new int[a.length + b.length];
+		int indexa = 0;
+		int indexb = 0;
+		int indexc = 0;
+		while (indexa < a.length && indexb < b.length) {
+			if (a[indexa] < b[indexb]) {
+				c[indexc] = a[indexa];
+				indexa++;
+			} else {
+				c[indexc] = b[indexb];
+				indexb++;
+			}
+			indexc++;
+		}
+		while (indexa < a.length) {
+			c[indexc] = a[indexa];
+			indexc++;
+			indexa++;
+		}
+		while (indexb < b.length) {
+			c[indexc] = b[indexb];
+			indexc++;
+			indexb++;
+		}
+		return c;
+	}
+		
+	public static void mergesort(int[] a) {
+		if (a.length <= 1)
+			return;
+		
+		int size = a.length / 2;
+		int[] left = Arrays.copyOfRange(a, 0, size);
+		int[] right = Arrays.copyOfRange(a, size + 1, a.length);
+		mergesort(left);
+		mergesort(right);
+		a = merge(left, right);
+	}
 
 	public static void main(String[] args) {
 		int[] a = { 35, 65, 30, 60, 20 };
@@ -55,5 +96,9 @@ public class Sorting {
 		int[] c = { 35, 65, 30, 60, 20 };
 		insertion(c);
 		System.out.println(Arrays.toString(c));
+		int[] d = { 35, 65, 30, 60, 20 };
+		mergesort(d);
+		System.out.println(Arrays.toString(d));
+		
 	}
 }

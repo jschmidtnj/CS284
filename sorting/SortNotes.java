@@ -63,4 +63,18 @@ public class SortNotes {
 	 * worst case 54321 - has 1 2 3 and 4 shifts - corresponds to the pass $ -> n(n-1)/2 total
 	 * O(n^2)
 	 */
+	
+	/*
+	 * Merge sort
+	 * 
+	 * 2 components - merge & mergesort
+	 * merge takes two arrays and put them together - element by element adds the lowest element
+	 * if the 2 arrays to merge are sorted, the result is sorted
+	 * 
+	 * split halfway, keep splitting recursively until they are singletons
+	 * then compare and merge and pop
+	 * 
+	 * height is log2(n)
+	 * O(nlogn)
+	 */
 }

@@ -1,8 +1,8 @@
-package sorting;
+package codingtests;
 
 import java.util.ArrayList;
 
-public class Test {
+public class icims {
 	public static int time(String E, String L) {
         // write your code in Java SE 8
         String[] start_time = E.split(":");
