@@ -77,4 +77,23 @@ public class SortNotes {
 	 * height is log2(n)
 	 * O(nlogn)
 	 */
+	
+	/*
+	 * O(n^2) - selection, bubble, insertion
+	 * O(nlogn) - merge
+	 * O(n^1.5) - shell
+	 * O(nlogn) - heap sort
+	 */
+	
+	/*
+	 * heap sort
+	 * create a heap, adding each element to heap & reheap, then remove from heap to get the order
+	 * it's pretty straight-forward
+	 * 
+	 * add & remove used - both logn
+	 * logn n times for both add and remove (2n*logn)
+	 * 
+	 * space complexity is large b/c you need to make a heap - useless
+	 * so instead use the original array to make a heap.
+	 */
 }

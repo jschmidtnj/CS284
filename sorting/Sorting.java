@@ -104,6 +104,50 @@ public class Sorting {
 				for (int j = 0; j < counts[i] && j < a.length; j++, resultindex++)
 					a[resultindex] = i;
 	}
+	
+	private static void buildHeap(int[] a) {
+		for (int i = 0; i < a.length; i++) {
+			int current = i;
+			int parent = (current - 1) / 2;
+			while (parent >= 0 && a[current] > a[parent]) {
+				swap(a, current, parent);
+				current = parent;
+				parent = (current - 1) / 2;
+			}
+		}
+	}
+	
+	private static void deconstructHeap(int[] a) {
+		swap(a, 0, a.length - 1);
+		int parent = 0;
+		int leftChild;
+		int rightChild;
+		int maxChild;
+		while (true) {
+			leftChild = parent * 2 + 1;
+			rightChild = leftChild + 1;
+			// determine minimum child
+			if (leftChild > a[a.length - 1]) { // reached a leaf
+				break;
+			}
+			maxChild = leftChild;
+			if (rightChild < a.length && a[rightChild] > a[leftChild]) { // if right child exists and is smaller
+				maxChild = rightChild;
+			}
+			// maxChild points to the smallest of the children
+			if (a[parent] > a[maxChild]) {
+				break; // parent is smaller than min child
+			}
+			swap(a, parent, maxChild);
+			parent = maxChild;
+		}
+	}
+	
+	public static void heapSort(int[] a) {
+		buildHeap(a);
+		System.out.println(Arrays.toString(a));
+		deconstructHeap(a);
+	}
 
 	public static void main(String[] args) {
 		int[] a = { 35, 65, 30, 60, 20 };
@@ -122,5 +166,7 @@ public class Sorting {
 		int[] e = { 35, 65, 30, 60, 20, 20	};
 		countingsort(e);
 		System.out.println(Arrays.toString(e));
+		int[] f = { 35, 65, 30, 60, 20, 20	};
+		heapSort(f);
 	}
 }
