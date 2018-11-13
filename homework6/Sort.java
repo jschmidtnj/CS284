@@ -1,11 +1,12 @@
 package homework6;
 
-import java.util.Stack;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * For this assignment, you will implement Lamport’s iterative (non-recursive)
  * variant of Hoare’s quicksort sorting algorithm in Java.
+ * 
+ * pledge: I pledge my honor that I have abided by the Stevens Honor System.
  * 
  * @author Joshua Schmidt
  *
@@ -13,6 +14,19 @@ import java.util.Arrays;
  */
 public class Sort<T extends Comparable<T>> {
 
+	/**
+	 * private b/c static methods
+	 */
+	private Sort() {
+
+	}
+
+	/**
+	 * creates interval class with upper and lower bounds
+	 * 
+	 * @author Joshua Schmidt
+	 *
+	 */
 	private static class Interval {
 
 		// Data Fields
@@ -31,6 +45,7 @@ public class Sort<T extends Comparable<T>> {
 
 		/**
 		 * gets lower bound data point
+		 * 
 		 * @return the lower bound
 		 */
 		public int getLower() {
@@ -39,6 +54,7 @@ public class Sort<T extends Comparable<T>> {
 
 		/**
 		 * gets upper bound data point
+		 * 
 		 * @return the upper bound
 		 */
 		public int getUpper() {
@@ -47,9 +63,11 @@ public class Sort<T extends Comparable<T>> {
 
 		/**
 		 * checks if 2 intervals are equal
+		 * 
 		 * @return true if this interval and the given interval have the same lower and
 		 *         upper bounds
 		 */
+		@Override
 		public boolean equals(Object o) {
 			Interval testinterval;
 			try {
@@ -62,8 +80,10 @@ public class Sort<T extends Comparable<T>> {
 
 		/**
 		 * returns the hash code of the interval
+		 * 
 		 * @return lower * lower + upper
 		 */
+		@Override
 		public int hashCode() {
 			return lower * lower + upper;
 		}
@@ -71,6 +91,7 @@ public class Sort<T extends Comparable<T>> {
 
 	/**
 	 * swaps elements in a array at indexes i and j
+	 * 
 	 * @param a array
 	 * @param i first index to swap
 	 * @param j second index to swap
@@ -84,22 +105,28 @@ public class Sort<T extends Comparable<T>> {
 	/**
 	 * sorts array of generics using Lamport’s iterative quicksort and median of 3
 	 * to get the pivot point
+	 * 
 	 * @param array
 	 */
 	public static <T extends Comparable<T>> void sort(T[] array) {
 
-		if ((array == null) || (array.length < 2)) {
+		if (array == null) {
+			throw new IllegalArgumentException("array cannot be null");
+		} else if (array.length < 2) {
 			return;
 		}
 
 		// create stack of intervals
-		Stack<Interval> intervals = new Stack<Interval>();
+		Set<Interval> intervals = new HashSet<Interval>();
 
 		// start with interval at full len
 		intervals.add(new Interval(0, array.length - 1));
 
 		while (!intervals.isEmpty()) {
-			Interval current = intervals.pop();
+			Iterator<Interval> iterate = intervals.iterator();
+			Interval current = iterate.next();
+			// System.out.println(current.hashCode());
+			intervals.remove(current);
 			int high = current.getUpper();
 			int low = current.getLower();
 			int span = high - low;
@@ -143,15 +170,6 @@ public class Sort<T extends Comparable<T>> {
 	}
 
 	public static void main(String[] args) {
-		Integer[] t1 = new Integer[5];
-		t1[0] = 6;
-		t1[1] = 3;
-		t1[2] = 4;
-		t1[3] = 1;
-		t1[4] = 2;
-		System.out.println(Arrays.toString(t1));
-		sort(t1);
-		System.out.println(Arrays.toString(t1));
 
 	}
 
