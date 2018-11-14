@@ -96,4 +96,16 @@ public class SortNotes {
 	 * space complexity is large b/c you need to make a heap - useless
 	 * so instead use the original array to make a heap.
 	 */
+	
+	/*
+	 * quick sort
+	 * splits into 2 parts, sorts each part, puts it back together
+	 * O(n^2logn) for just using the pivot as the first element and putting lesser to left,
+	 * greater to right, then do recursive
+	 * 
+	 * but if you have an up and a down pointer as well, and you check while a[up] < a[pivot] && up < last do the
+	 * swapping
+	 * 
+	 * this reduces it to O(n) time
+	 */
 }
