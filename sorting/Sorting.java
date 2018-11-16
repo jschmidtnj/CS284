@@ -177,7 +177,7 @@ public class Sorting {
 	}
 
 	public static void quicksort(int[] a) {
-		O(n^2)
+		// O(n^2)
 		quicksorthelp(a, 0, a.length - 1);
 	}
 

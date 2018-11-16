@@ -115,6 +115,17 @@ public class Sort<T extends Comparable<T>> {
 		} else if (array.length < 2) {
 			return;
 		}
+		
+		// get median of 3 and sort those
+		int first = 0;
+		int second = array.length / 2;
+		int third = array.length - 1;
+		if (array[first].compareTo(array[second]) < 0)
+			swap(array, first, second);
+		if (array[second].compareTo(array[third]) < 0)
+			swap(array, second, third);
+		if (array[first].compareTo(array[third]) < 0)
+			swap(array, first, third);
 
 		// create stack of intervals
 		Set<Interval> intervals = new HashSet<Interval>();
@@ -133,11 +144,11 @@ public class Sort<T extends Comparable<T>> {
 
 			// could use assert
 			if (!((low >= 0) && (low < array.length)))
-				break;
+				continue;
 			if (!((high >= 0) && (high < array.length)))
-				break;
+				continue;
 			if (!(low <= high))
-				break;
+				continue;
 
 			if (span >= 2) {
 				// pivot index is lowest, pivot is highest element
