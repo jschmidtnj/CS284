@@ -83,6 +83,7 @@ public class SortNotes {
 	 * O(nlogn) - merge
 	 * O(n^1.5) - shell
 	 * O(nlogn) - heap sort
+	 * O(n^2) - quick sort
 	 */
 	
 	/*
@@ -107,5 +108,8 @@ public class SortNotes {
 	 * swapping
 	 * 
 	 * this reduces it to O(n) time
+	 * 
+	 * you have an up and a down and a pivot
+	 * all elements that are smaller than the pivot go to the left of the pivot.
 	 */
 }
