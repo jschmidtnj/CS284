@@ -1,6 +1,8 @@
 package hash;
 
-public class Hash {
+import java.util.*;
+
+public class Hash<K, V> { // key-value pairs
 
 	/*
 	 * access an entry based on key, not location
@@ -35,6 +37,82 @@ public class Hash {
 	 * O(n). like with linear probing...
 	 * 
 	 * 
+	 * new day 11/26/18
+	 * Create a table:
+	 * keys | (key, value)
+	 * 
+	 * huffman tree - based on frequencies
+	 * 
+	 * bucketting - linked list in each index = not that much room for collision
+	 * linear probing - insertion adds to any open slot - creates room for collision
+	 * 
 	 */
+	
+	private List<HashEntry<K,V>> table;
+	private static final double LOADFACTOR = 0.75; //how much of table can be full before rehash / refactor
+	private int size;
+	private int used;
+	
+	public Hash() {
+		size = 100;
+		table = new ArrayList<HashEntry<K,V>>(size);
+		used = 0;
+	}
+	
+	public void rehash() {
+		//TODO
+	}
+	
+	public void add(K key, V value) {
+		add(new HashEntry<K, V>(key, value));
+	}
+	
+	public void add(HashEntry<K,V> e) {
+		// compute the hashcode of the key
+		int index = e.getKey().hashCode();
+		HashEntry<K,V> position = table.get(index);
+		if (position != null) {
+			table.add(e);
+			used++;
+		}
+		if (used > (size * LOADFACTOR)) {
+			rehash();
+		}
+	}
+	
+	public boolean delete(K key) {
+		int index = key.hashCode() % size;
+		HashEntry<K,V> position = table.get(index);
+		if (position == null) {
+			return false;
+		}
+		for (HashEntry<K,V> e: table) {
+			if (e.getKey().equals(key)) {
+				//V temp = e.getValue();
+				table.remove(e);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public V find(K key) {
+		int index = key.hashCode() % size;
+		HashEntry<K,V> position = table.get(index);
+		if (position == null) {
+			return null;
+		}
+		for (HashEntry<K,V> e: table) {
+			if (e.getKey().equals(key)) {
+				return e.getValue();
+			}
+		}
+		return null;
+		
+	}
+	
+	public static void main(String[] args) {
+		
+	}
 
 }
