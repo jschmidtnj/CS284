@@ -13,4 +13,6 @@ public class AVLNotes {
 	 * or something, and once you fix that one, everything should be fixed
 	 * R-R or R-L case
 	 */
+	
+	// see https://www.cs.usfca.edu/~galles/visualization/AVLtree.html
 }
