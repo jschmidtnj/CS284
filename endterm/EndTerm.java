@@ -37,4 +37,12 @@ public class EndTerm {
 	 * know time complexities above. hashing is always O(1). rehashing is a price to pay
 	 * how does median of 3 affect time complexity?
 	 */
+	
+	/*
+	 * Recursion: no dedicated recursive question but there may be one on the test
+	 * Binary Trees -> BST's, Heaps -> Tree, array
+	 * Sorting -> insertion, selection, bubble, merge, heap, quicksort
+	 * Hashing -> name resolution: open addressing -> linear probing, quadratic probing, chaining or bucketing
+	 * AVL Trees -> add, remove, (and find, but same as BST's) - all logn operations
+	 */
 }
