@@ -35,30 +35,6 @@ public class BTree<E> {
 			this.left = left;
 			this.right = right;
 		}
-
-		public F getData() {
-			return data;
-		}
-
-		public void setData(F data) {
-			this.data = data;
-		}
-
-		public Node<F> getLeft() {
-			return left;
-		}
-
-		public void setLeft(Node<F> left) {
-			this.left = left;
-		}
-
-		public Node<F> getRight() {
-			return right;
-		}
-
-		public void setRight(Node<F> right) {
-			this.right = right;
-		}
 		
 		public Boolean isLeaf() {
 			return this.left == null && this.right == null;
@@ -82,30 +58,6 @@ public class BTree<E> {
 	public BTree(E data, BTree<E> leftTree, BTree<E> rightTree) {
 		size = leftTree.size + rightTree.size + 1;
 		root = new Node<E>(data, leftTree.root, rightTree.root);
-	}
-
-	public Node<E> getRoot() {
-		return root;
-	}
-
-	public void setRoot(Node<E> root) {
-		this.root = root;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
-	}
-	
-	public boolean isLeaf() {
-		return root != null && root.isLeaf();
-	}
-	
-	public int no_of_leaves() {
-		return no_of_leaves(root);
 	}
 	
 	public int no_of_leaves(Node<E> current) {
@@ -210,21 +162,6 @@ public class BTree<E> {
 
 	public String toString(Node<E> current, int i) {
 		// print out tree in preorder
-		StringBuilder s = new StringBuilder();
-		for (int j = 0; j < i; j++) {
-			s.append("---");
-		}
-		if (current == null) {
-			s.append("null");
-			return s.toString();
-		}
-		s.append(current.data.toString());
-		s.append("\n");
-		s.append(toString(current.left, i + 1));
-		s.append("\n");
-		s.append(toString(current.right, i + 1));
-		s.append("\n");
-		return s.toString();
 	}
 
 	public String toString() {
@@ -236,6 +173,73 @@ public class BTree<E> {
 		BTree<Integer> leaf2 = new BTree<Integer>(10);
 		BTree<Integer> bt = new BTree<Integer>(12, leaf1, leaf2);
 		System.out.println(bt.isLeaf());
+	}
+}
+
+```
+
+### Heap
+
+```java
+
+package heap;
+
+import java.util.ArrayList;
+
+public class Heap<E extends Comparable<E>> {
+	private ArrayList<E> data;
+
+	public Heap(int size) {
+		this.data = new ArrayList<E>(size);
+	}
+	
+	private void swap(int i, int j) {
+		E temp = data.get(i);
+		data.set(i,  data.get(j));
+		data.set(j,  temp);
+	}
+	
+	public void add(E item) {
+		data.add(item);
+		int current = data.size() - 1;
+		int parent = (current - 1) / 2;
+		while (parent >= 0 && data.get(current).compareTo(data.get(parent)) < 0) {
+			swap(current, parent);
+			current = parent;
+			parent = (current - 1) / 2;
+		}
+	}
+	
+	public void remove() {
+		// this removes the top-most element each time
+		data.set(0, data.remove(data.size() - 1));
+		int parent = 0;
+		int leftChild;
+		int rightChild;
+		int minChild;
+		while (true) {
+			leftChild = parent * 2 + 1;
+			rightChild = leftChild + 1;
+			// determine minimum child
+			if (leftChild > data.size() - 1) { // reached a leaf
+				break;
+			}
+			minChild = leftChild;
+			if (rightChild < data.size() && data.get(rightChild).compareTo(data.get(leftChild)) < 0) { // if right child exists and is smaller
+				minChild = rightChild;
+			}
+			// minChild points to the smallest of the children
+			if (data.get(parent).compareTo(data.get(minChild)) < 0) {
+				break; // parent is smaller than min child
+			}
+			swap(parent, minChild);
+			parent = minChild;
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return data.toString();
 	}
 }
 
@@ -606,13 +610,6 @@ public class Sorting {
 		// O(n^2)
 		quicksorthelp(a, 0, a.length - 1);
 	}
-
-	public static void main(String[] args) {
-		int[] a = { 35, 65, 30, 60, 20 };
-		System.out.println(Arrays.toString(a));
-		selection(a);
-		//...
-	}
 }
 
 ```
@@ -664,14 +661,6 @@ public class HashTableOpen<K, V> implements KWHashMap<K, V> {
 			value = val;
 			return oldVal;
 		}
-	}
-
-	public int size() {
-		return numKeys;
-	}
-
-	public boolean isEmpty() {
-		return numKeys == 0;
 	}
 
 	private int find(Object key) {
